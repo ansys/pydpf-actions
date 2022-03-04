@@ -17,7 +17,7 @@ runs:
   steps:
     - run: |
         echo ${process.platform}
-        $BranchName = if (${process.platform} -eq "Linux") { linux_release-${{inputs.ANSYS_VERSION }} } else { win_release-${{inputs.ANSYS_VERSION }} }
+        $BranchName = if (${process.platform} -eq "Linux") { "linux_release-${{inputs.ANSYS_VERSION }}" } else { "win_release-${{inputs.ANSYS_VERSION }}" }
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
       shell: pwsh
 
@@ -31,7 +31,7 @@ runs:
     - run: |
         cd AWP_ROOT$inputs:ANSYS_VERSION\aisol\bin\winx64
         ls .
-        $ToLaunch = if (${process.platform} -eq "Linux") { ./Ans.Dpf.Grpc.sh }} } else { ./Ans.Dpf.Grpc.bat }} }
+        $ToLaunch = if (${process.platform} -eq "Linux") { "./Ans.Dpf.Grpc.sh" }} } else { "./Ans.Dpf.Grpc.bat" }} }
         Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
       shell: pwsh
 
