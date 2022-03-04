@@ -1,0 +1,56 @@
+name: GitHub Actions
+
+on:
+  pull_request:
+     branches-ignore:
+       - '*no-ci*'
+  push:
+    tags:
+      - "*"
+    branches:
+      - master
+      - "release*"
+
+jobs:
+  test_windows:
+    name: Windows
+    runs-on: windows-2019
+
+    env:
+      ANSYS_VERSION: 221
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: install-dpf
+        uses: ./install-dpf-server
+        with:
+          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          ANSYS_VERSION: ${{env.ANSYS_VERSION}}
+          
+      - name: "Go to to server path"
+        run: |
+          cd ${{ steps.install-dpf.outputs.SERVER }}
+          ls .
+
+  test_linux:
+    name: Linux
+    runs-on: ubuntu-latest
+
+    env:
+      ANSYS_VERSION: 221
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: install-dpf
+        uses: ./install-dpf-server
+        with:
+          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          ANSYS_VERSION: ${{env.ANSYS_VERSION}}
+
+      - name: "Go to to server path"
+        run: |
+          cd ${{ steps.install-dpf.outputs.SERVER }}
+          ls .
+        shell: pwsh
