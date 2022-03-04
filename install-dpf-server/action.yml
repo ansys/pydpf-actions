@@ -5,10 +5,6 @@ inputs:
     description: "github secret to access https://github.com/ansys-dpf/dpf-standalone"
     required: true
   ANSYS_VERSION:
-    description: "Ansys release version number in the format 22.1"
-    required: false
-    default: "22.1"
-  ANSYS_VERSION_NO_POINT:
     description: "Ansys release version number in the format 221"
     required: false
     default: "221"
@@ -21,13 +17,14 @@ runs:
   steps:
     - run: |
         echo ${{runner.os}}
-        $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-${{inputs.ANSYS_VERSION }}" } else { "win_release-${{inputs.ANSYS_VERSION }}" }
+        $ANSYS_VERSION_WITH_POINT=${{env.ANSYS_VERSION}}.Insert(2,'.')
+        $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
       shell: pwsh
 
     - id: set-server-path
       run: |
-          echo "::set-output name=SERVER::$(echo AWP_ROOT$inputs:ANSYS_VERSION_NO_POINT)"
+          echo "::set-output name=SERVER::$(echo AWP_ROOT$inputs:ANSYS_VERSION)"
       shell: bash
       
     - run: |
@@ -42,7 +39,7 @@ runs:
            
       shell: pwsh
 
-    - run: echo "AWP_ROOT${{inputs.ANSYS_VERSION_NO_POINT}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+    - run: echo "AWP_ROOT${{inputs.ANSYS_VERSION}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       shell: pwsh
 
     - run: |
