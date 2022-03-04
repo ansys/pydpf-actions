@@ -1,11 +1,11 @@
-name: 'Install DPF Server'
-description: 'Install and test DPF Server for different OS and versions'
+name: "Install DPF Server"
+description: "Install and test DPF Server for different OS and versions"
 inputs:
   dpf-standalone-TOKEN:
-    description: 'github secret to access https://github.com/ansys-dpf/dpf-standalone'
+    description: "github secret to access https://github.com/ansys-dpf/dpf-standalone"
     required: true
   ANSYS_VERSION:
-    description: 'Ansys release version number in the format 22.1'
+    description: "Ansys release version number in the format 22.1"
     required: false
     default: "22.1"
 outputs:
