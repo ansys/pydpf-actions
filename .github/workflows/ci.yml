@@ -30,7 +30,7 @@ jobs:
           
       - name: "Go to to server path"
         run: |
-          cd ${{ steps.install-dpf.outputs.SERVER }}"
+          cd ${{ steps.install-dpf.outputs.SERVER }}
           ls .
 
   test_linux:
@@ -51,6 +51,6 @@ jobs:
 
       - name: "Go to to server path"
         run: |
-          cd ${{ steps.install-dpf.outputs.SERVER }}"
+          cd ${{ steps.install-dpf.outputs.SERVER }}
           ls .
         shell: pwsh
