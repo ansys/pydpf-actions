@@ -27,3 +27,19 @@ jobs:
         with:
           dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
+
+  test_linux:
+    name: Linux
+    runs-on: ubuntu-latest
+
+    env:
+      ANSYS_VERSION: 22.1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: install-dpf
+        uses: ./install-dpf-server
+        with:
+          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          ANSYS_VERSION: ${{env.ANSYS_VERSION}}
