@@ -26,7 +26,7 @@ runs:
 
     - id: set-server-path
       run: |
-          echo "::set-output name=SERVER::$(echo AWP_ROOT$inputs:ANSYS_VERSION)"
+          echo "::set-output name=server-path::$(echo AWP_ROOT$inputs:ANSYS_VERSION)"
       shell: bash
       
     - run: |
