@@ -17,7 +17,8 @@ runs:
   steps:
     - run: |
         echo ${{runner.os}}
-        [string]$TEMP=${{env.ANSYS_VERSION}}.
+        $TEMP=${{env.ANSYS_VERSION}}
+        $TEMP.ToString()
         $ANSYS_VERSION_WITH_POINT=$TEMP.Insert(2,'.')
         $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
