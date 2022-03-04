@@ -27,6 +27,11 @@ jobs:
         with:
           dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
+          
+      - name: "Go to to server path"
+        run: |
+          cd ${{ steps.install-dpf.outputs.SERVER }}"
+          ls .
 
   test_linux:
     name: Linux
@@ -43,3 +48,9 @@ jobs:
         with:
           dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
+
+      - name: "Go to to server path"
+        run: |
+          cd ${{ steps.install-dpf.outputs.SERVER }}"
+          ls .
+        shell: pwsh
