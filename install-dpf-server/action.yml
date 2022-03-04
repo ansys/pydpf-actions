@@ -31,10 +31,13 @@ runs:
     - id: set-server-path
       run: echo "::set-output name=SERVER::$(echo AWP_ROOT$inputs:ANSYS_VERSION_NO_POINT)"
       shell: bash
+      
+    - run: echo "SERVER=${{github.workspace}}\dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      shell: pwsh
 
     - run: |
         $SubFolder = if (${process.platform} -eq "Linux") { "linx64" } else { "winx64" }
-        cd ${{outputs.SERVER}}\aisol\bin\$SubFolder
+        cd ${{env.SERVER}}\aisol\bin\$SubFolder
         ls .
         $ToLaunch = if (${process.platform} -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
         Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
