@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - id: install-dpf
-        uses: pydpf-actions/install-dpf-server@v0
+        uses: ./install-dpf-server@v0
         with:
           dpf-standalone-TOKEN: ""
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
