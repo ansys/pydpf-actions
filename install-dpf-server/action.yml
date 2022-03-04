@@ -8,6 +8,10 @@ inputs:
     description: "Ansys release version number in the format 22.1"
     required: false
     default: "22.1"
+  ANSYS_VERSION_NO_POINT:
+    description: "Ansys release version number in the format 221"
+    required: false
+    default: "221"
 outputs:
   SERVER:
     description: "Path to the server"
@@ -21,7 +25,7 @@ runs:
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
       shell: pwsh
 
-    - run: echo "AWP_ROOT$inputs:ANSYS_VERSION=${{github.workspace}}\dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+    - run: echo "AWP_ROOT${{inputs.ANSYS_VERSION_NO_POINT}}=${{github.workspace}}\dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       shell: pwsh
 
     - id: set-server-path
@@ -29,7 +33,8 @@ runs:
       shell: bash
 
     - run: |
-        cd ${AWP_ROOT$inputs:ANSYS_VERSION}\aisol\bin\winx64
+        $SubFolder = if (${process.platform} -eq "Linux") { "linx64" } else { "winx64" }
+        cd ${{env:AWP_ROOT${{inputs.ANSYS_VERSION_NO_POINT}}}}\aisol\bin\$SubFolder
         ls .
         $ToLaunch = if (${process.platform} -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
         Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
