@@ -25,5 +25,5 @@ jobs:
       - id: install-dpf
         uses: ./install-dpf-server
         with:
-          dpf-standalone-TOKEN: ""
+          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
