@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANSYS_VERSION: 22.1
+      ANSYS_VERSION: 221
 
     steps:
       - uses: actions/checkout@v2
