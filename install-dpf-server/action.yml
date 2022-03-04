@@ -1,0 +1,46 @@
+name: 'Install DPF Server'
+description: 'Install and test DPF Server for different OS and versions'
+inputs:
+  dpf-standalone-TOKEN: 1
+    description: 'github secret to access https://github.com/ansys-dpf/dpf-standalone'
+    required: true
+  ANSYS_VERSION: 2
+    description: 'Ansys release version number in the format 22.1'
+    required: false
+    default: "22.1"
+outputs:
+  SERVER:
+    description: "Path to the server"
+    value: ${{ steps.set-server-path.outputs.server-path }}
+runs:
+  using: "composite"
+  steps:
+    - name: Clone dpf-standalone
+      run: |
+        echo ${process.platform}
+        $BranchName = if (${process.platform} == "Linux") { linux_release-${{inputs.ANSYS_VERSION }} } else { win_release-${{inputs.ANSYS_VERSION }} }
+        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
+      shell: pwsh
+
+    - name: Set AWP_ROOT$inputs::ANSYS_VERSION
+      run: echo "AWP_ROOT$inputs:ANSYS_VERSION=${{github.workspace}}\dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      shell: pwsh
+
+    - name: Set SERVER
+      id: set-server-path
+      run: echo "::set-output name=server-path::$(echo AWP_ROOT$inputs:ANSYS_VERSION)"
+      shell: bash
+
+    - name: Start DPF Server
+      run: |
+        cd ${{outputs:SERVER}}\aisol\bin\winx64
+        ls .
+        $ToLaunch = if (${process.platform} == "Linux") { ./Ans.Dpf.Grpc.sh }} } else { ./Ans.Dpf.Grpc.bat }} }
+        Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
+      shell: pwsh
+
+    - name: Show DPF Server Logs
+      run: Get-Content -Path $env:SERVER\aisol\bin\winx64\log.txt
+      shell: pwsh
+
+
