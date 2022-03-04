@@ -38,7 +38,7 @@ runs:
      
     - id: set-server-path
       run: |
-          echo "::set-output name=server-path::$(echo $env:SERVER)"
+          echo "::set-output name=server-path::$(echo ${SERVER})"
       shell: bash
 
     - run: echo "AWP_ROOT${{inputs.ANSYS_VERSION}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
