@@ -29,12 +29,12 @@ runs:
       shell: pwsh
 
     - id: set-server-path
-      run: echo "::set-output name=server-path::$(echo AWP_ROOT$inputs:ANSYS_VERSION)"
+      run: echo "::set-output name=server-path::$(echo AWP_ROOT$inputs:ANSYS_VERSION_NO_POINT)"
       shell: bash
 
     - run: |
         $SubFolder = if (${process.platform} -eq "Linux") { "linx64" } else { "winx64" }
-        cd ${{env:AWP_ROOT${{inputs.ANSYS_VERSION_NO_POINT}}}}\aisol\bin\$SubFolder
+        cd ${{env.AWP_ROOT${{inputs.ANSYS_VERSION_NO_POINT}}}}\aisol\bin\$SubFolder
         ls .
         $ToLaunch = if (${process.platform} -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
         Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
