@@ -65,16 +65,19 @@ runs:
       run: |
         pip install -r requirements_docs.txt
 
-    - name: "Build HTML Documentation"
+    - name: "Build sphinx doc"
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
         sphinx-apidoc -o docs/source/api ansys -f --implicit-namespaces --separate --no-headings
-        cd docs/
+
+    - name: "Build HTML Documentation"
+      shell: bash
+      working-directory: docs
+      run: |
         make clean
         echo "Making html doc..."
         make html &>log_html.txt
-        cd ../
 
     - name: "Build PDF Documentation"
       shell: bash
@@ -82,6 +85,7 @@ runs:
       run: |
         sudo apt update
         sudo apt install texlive-latex-extra latexmk
+        make clean
         echo "Making pdf doc..."
         make pdf &>log_pdf.txt
 
