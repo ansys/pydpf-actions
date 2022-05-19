@@ -37,7 +37,14 @@ runs:
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package
+      shell: bash
+      run: |
+        pip install -r requirements_build.txt
+        python setup.py bdist_wheel
+        export WHEEL_NAME=`ls dist/*.whl`
+        echo ${WHEEL_NAME}
+        pip install ${WHEEL_NAME}
+        cd tests
 
     - name: "Install extras"
       shell: bash
@@ -58,7 +65,7 @@ runs:
       run: |
         pip install -r requirements_docs.txt
 
-    - name: "Build Documentation"
+    - name: "Build HTML Documentation"
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
@@ -66,8 +73,17 @@ runs:
         cd docs/
         make clean
         echo "Making html doc..."
-        make html &>log.txt
+        make html &>log_html.txt
         cd ../
+
+    - name: "Build PDF Documentation"
+      shell: bash
+      working-directory: docs
+      run: |
+        sudo apt update
+        sudo apt install texlive-latex-extra latexmk
+        echo "Making pdf doc..."
+        make pdf &>log_pdf.txt
 
     - name: "Upload Documentation Build log"
       uses: actions/upload-artifact@v2
@@ -88,4 +104,10 @@ runs:
         path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers
+      shell: bash
+      run: |
+        echo $0
+        if pgrep -x "Ans.Dpf.Grpc" > /dev/null
+        then
+            pkill -f Ans.Dpf.Grpc.exe || true
+        fi
