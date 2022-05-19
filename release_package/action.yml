@@ -1,0 +1,50 @@
+name: "Release DPF Package"
+description: "Publishes the local DPF package to PyPi along with release artifacts"
+inputs:
+  PYPI_TOKEN:
+    description: "PyPi token to the package repository"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+
+    - uses: actions/download-artifact@v2
+
+    - name: Display structure of downloaded files
+      shell: bash
+      run: ls -R
+
+    - name: Install twine
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools twine
+
+    - name: Build package
+      shell: bash
+      run: python setup.py sdist
+
+    - name: Publish distribution 📦 to PyPI
+      shell: bash
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ inputs.PYPI_TOKEN }}
+        TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
+      run: |
+        twine upload --skip-existing ./**/*.whl
+        twine upload --skip-existing ./**/*.tar.gz
+#         /!\ Do NOT publish to Pypi the zip containing the wheelhouses
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./**/*.whl
+          ./**/*.tar.gz
+          ./**/*.pdf
+          ./**/*.zip
