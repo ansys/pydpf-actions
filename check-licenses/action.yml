@@ -3,7 +3,7 @@ description: "Checks licenses of all installed packages in the current environme
 runs:
   using: "composite"
   steps:
-    - name: Check licences of packages
+    - name: "Check licences of packages"
       shell: bash
       run: |
         pip install pip-licenses

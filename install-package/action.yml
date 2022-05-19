@@ -4,12 +4,12 @@ creating a wheel"
 runs:
   using: "composite"
   steps:
-    - name: Install local package
-      shell: cmd
+    - name: "Install local package"
+      shell: bash
       run: |
         pip install -r requirements_build.txt
         python setup.py bdist_wheel
-        FOR /F %%a in ('dir /s/b dist\*.whl') do SET WHEELPATH=%%a
-        ECHO %WHEELPATH%
+        export WHEEL_NAME=`ls dist/*.whl`
+        echo ${WHEEL_NAME}
+        pip install ${WHEEL_NAME}
         cd tests
-        pip install %WHEELPATH%

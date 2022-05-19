@@ -3,9 +3,11 @@ description: "Kill all running DPF Servers"
 runs:
   using: "composite"
   steps:
-    - name: Kill all servers
-      shell: cmd
+    - name: "Kill all servers"
+      shell: bash
       run: |
-        tasklist /FI "IMAGENAME eq Ans.Dpf.Grpc.exe" 2>NUL | find /I /N "Ans.Dpf.Grpc.exe">NUL
-        ECHO %ERRORLEVEL%
-        if "%ERRORLEVEL%"=="0"(taskkill /f /im Ans.Dpf.Grpc.exe)
+        echo $0
+        if pgrep -x "Ans.Dpf.Grpc" > /dev/null
+        then
+            pkill -f Ans.Dpf.Grpc.exe || true
+        fi        
