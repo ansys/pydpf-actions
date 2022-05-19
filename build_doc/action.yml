@@ -37,14 +37,7 @@ runs:
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      shell: bash
-      run: |
-        pip install -r requirements_build.txt
-        python setup.py bdist_wheel
-        export WHEEL_NAME=`ls dist/*.whl`
-        echo ${WHEEL_NAME}
-        pip install ${WHEEL_NAME}
-        cd tests
+      uses: pyansys/pydpf-actions/install-package
 
     - name: "Install extras"
       shell: bash
@@ -108,10 +101,4 @@ runs:
         path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
-      shell: bash
-      run: |
-        echo $0
-        if pgrep -x "Ans.Dpf.Grpc" > /dev/null
-        then
-            pkill -f Ans.Dpf.Grpc.exe || true
-        fi
+      uses: pyansys/pydpf-actions/kill-dpf-servers

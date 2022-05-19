@@ -46,11 +46,7 @@ runs:
       if: ${{inputs.install_extras}} != null
 
     - name: "Check licences of packages"
-      shell: bash
-      run: |
-        pip install pip-licenses
-        pip-licenses
-        pip uninstall -y pip-licenses
+      uses: pyansys/pydpf-actions/check-licenses
 
     - name: "Test import"
       shell: bash
