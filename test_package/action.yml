@@ -23,7 +23,7 @@ runs:
         pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2
+      uses: ./.github/kill-dpf-servers
 
     - name: "Test API"
       shell: bash
@@ -32,7 +32,7 @@ runs:
         pytest -v --cov=ansys.dpf.post --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2
+      uses: ./.github/kill-dpf-servers
 
     - name: "Upload Docstring Test Results"
       uses: actions/upload-artifact@v2
