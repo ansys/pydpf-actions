@@ -23,7 +23,7 @@ runs:
         pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      uses: ./kill-dpf-servers
+      uses: pyansys/pydpf-actions/kill-dpf-servers@fix/versions
 
     - name: "Test API"
       shell: bash
