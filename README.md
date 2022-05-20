@@ -111,7 +111,7 @@ It then zips it and uploads it as artifact.
 To use `build_doc` in a github workflow, add this step:
 ```
 - id: build_doc
-  uses: ./.github/build_doc
+  uses: pyansys/pydpf-actions/build_doc
   with:
     python-version: "3.8"
     ANSYS_VERSION: 221
