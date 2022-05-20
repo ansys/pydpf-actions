@@ -37,7 +37,7 @@ runs:
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package
+      uses: pyansys/pydpf-actions/install-package@v2
 
     - name: "Install extras"
       shell: bash
@@ -101,4 +101,4 @@ runs:
         path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2
