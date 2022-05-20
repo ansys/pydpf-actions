@@ -31,13 +31,13 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@fix/versions
+      uses: pyansys/pydpf-actions/install-dpf-server@v2.0
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@fix/versions
+      uses: pyansys/pydpf-actions/install-package@v2.0
 
     - name: "Install extras"
       shell: bash
@@ -46,7 +46,7 @@ runs:
       if: ${{inputs.install_extras}} != null
 
     - name: "Check licences of packages"
-      uses: pyansys/pydpf-actions/check-licenses@fix/versions
+      uses: pyansys/pydpf-actions/check-licenses@v2.0
 
     - name: "Test import"
       shell: bash
@@ -68,4 +68,4 @@ runs:
       if: ${{ inputs.python-version }} == '3.8' && ${{ runner.os }} == 'Windows'
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@fix/versions
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
