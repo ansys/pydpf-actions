@@ -60,5 +60,3 @@ runs:
 
     - run: Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
       shell: pwsh
-
-
