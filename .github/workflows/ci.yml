@@ -34,7 +34,7 @@ jobs:
           ls .
 
       - name: "Kill all servers"
-        uses: pyansys/pydpf-actions/kill-dpf-servers
+        uses: ./kill-dpf-servers
 
   test_linux:
     name: Linux
@@ -59,4 +59,4 @@ jobs:
         shell: pwsh
 
       - name: "Kill all servers"
-        uses: pyansys/pydpf-actions/kill-dpf-servers
+        uses: ./kill-dpf-servers
