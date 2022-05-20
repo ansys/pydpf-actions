@@ -31,13 +31,13 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: "Install DPF"
-      uses: ./install-dpf-server
+      uses: pyansys/pydpf-actions/install-dpf-server@fix/versions
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: ./install-package
+      uses: pyansys/pydpf-actions/install-package@fix/versions
 
     - name: "Install extras"
       shell: bash
@@ -101,4 +101,4 @@ runs:
         path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
-      uses: ./kill-dpf-servers
+      uses: pyansys/pydpf-actions/kill-dpf-servers@fix/versions
