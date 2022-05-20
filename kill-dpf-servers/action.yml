@@ -1,5 +1,5 @@
 name: "Kill DPF Servers"
-description: "Kill all running DPF Servers"
+description: "Kills all running DPF Servers"
 runs:
   using: "composite"
   steps:

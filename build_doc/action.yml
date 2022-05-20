@@ -1,5 +1,5 @@
 name: "Generate documentation"
-description: "Generates the documentation for the DPF local package"
+description: "Generates the documentation for the local DPF package"
 inputs:
   python-version:
     description: "Python version"

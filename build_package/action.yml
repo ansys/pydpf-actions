@@ -66,3 +66,6 @@ runs:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
       if: ${{ inputs.python-version }} == '3.8' && ${{ runner.os }} == 'Windows'
+
+    - name: "Kill all servers"
+      uses: pyansys/pydpf-actions/kill-dpf-servers
