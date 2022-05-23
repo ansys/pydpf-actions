@@ -68,6 +68,7 @@ runs:
       shell: bash
       working-directory: docs
       run: |
+        export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
         make html 
@@ -78,6 +79,7 @@ runs:
       shell: bash
       working-directory: docs
       run: |
+        export TEMP=${{ runner.temp }}
         sudo apt update
         sudo apt install texlive-latex-extra latexmk
         make clean
