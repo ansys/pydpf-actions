@@ -70,7 +70,9 @@ runs:
       run: |
         make clean
         echo "Making html doc..."
-        make html &>log_html.txt
+        make html 
+
+#        &>log_html.txt
 
     - name: "Build PDF Documentation"
       shell: bash
@@ -80,7 +82,9 @@ runs:
         sudo apt install texlive-latex-extra latexmk
         make clean
         echo "Making pdf doc..."
-        make pdf &>log_pdf.txt
+        make pdf 
+
+#        &>log_pdf.txt
 
     - name: "Upload Documentation Build log"
       uses: actions/upload-artifact@v2
