@@ -71,9 +71,7 @@ runs:
         export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
-        make html 
-
-#        &>log_html.txt
+        make html &>log_html.txt
 
     - name: "Build PDF Documentation"
       shell: bash
@@ -82,10 +80,10 @@ runs:
         export TEMP=${{ runner.temp }}
         sudo apt update
         sudo apt install texlive-latex-extra latexmk
-        make clean
         echo "Making pdf doc..."
         make pdf 
 
+#        make clean
 #        &>log_pdf.txt
 
     - name: "Upload Documentation Build log"
