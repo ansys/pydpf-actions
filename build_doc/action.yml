@@ -21,6 +21,9 @@ inputs:
   install_extras:
     description: "Extras to install for the local package"
     required: false
+  build_extras:
+    description: "Extra paths to build the doc for in the spinx-api command"
+    required: false
 
 runs:
   using: "composite"
@@ -62,7 +65,7 @@ runs:
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys -f --implicit-namespaces --separate --no-headings &>log_sphinx.txt
+        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings &>log_sphinx.txt
 
     - name: "Build HTML Documentation"
       shell: bash
