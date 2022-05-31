@@ -17,13 +17,22 @@ runs:
       run: |
         pip install -r requirements_test.txt
 
-    - name: "Set TMP"
+    - name: "Check TMP"
       shell: bash
       run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
+
+    - name: "Set TMP"
+      shell: bash
+      run: |
         export TMP=${{ runner.temp }}
         export TEMP=${{ runner.temp }}
+      if: ${{ runner.os }} == "Linux"
+
+    - name: "Check TMP again"
+      shell: bash
+      run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
 
@@ -33,7 +42,9 @@ runs:
     - name: "Test API Docstrings"
       shell: bash
       run: |
-        pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
+        pytest --doctest-modules --durations=0 --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
@@ -42,6 +53,8 @@ runs:
       shell: bash
       run: |
         cd tests
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
         pytest -v --durations=0 --cov=ansys.dpf.post --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Kill all servers"
