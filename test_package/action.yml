@@ -20,15 +20,16 @@ runs:
     - name: "Set TMP"
       shell: bash
       run: |
-        echo "TMP: "+$TMP
-        echo "TEMP: "+$TEMP
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
         echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
         echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
 
     - name: "Test API Docstrings"
       shell: bash
       run: |
-        echo $TMP
         pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
