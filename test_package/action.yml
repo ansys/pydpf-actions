@@ -19,7 +19,11 @@ runs:
 
     - name: "Set TMP"
       shell: bash
-      run: echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
+      run: |
+        echo "TMP: "+$TMP
+        echo "TEMP: "+$TEMP
+        echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
+        echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
 
     - name: "Test API Docstrings"
       shell: bash
