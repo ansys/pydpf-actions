@@ -24,6 +24,7 @@ runs:
     - name: "Test API Docstrings"
       shell: bash
       run: |
+        echo $TMP
         pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
