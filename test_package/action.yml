@@ -17,10 +17,13 @@ runs:
       run: |
         pip install -r requirements_test.txt
 
+    - name: "Set TMP"
+      shell: bash
+      run: echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
+
     - name: "Test API Docstrings"
       shell: bash
       run: |
-        export TEMP=${{ runner.temp }}
         pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
@@ -37,10 +40,9 @@ runs:
 #      if: ${{ runner.os }} == "Linux"
 
     - name: "Test API"
-      shell: pwsh
+      shell: bash
       run: |
         cd tests
-        $env:TEMP="${{ runner.temp }}"
         pytest -v --cov=ansys.dpf.post --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Kill all servers"
