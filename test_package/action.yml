@@ -22,10 +22,13 @@ runs:
       run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
-        echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
-        echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
+        export TMP=${{ runner.temp }}
+        export TEMP=${{ runner.temp }}
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
+
+#        echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
+#        echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
 
     - name: "Test API Docstrings"
       shell: bash
