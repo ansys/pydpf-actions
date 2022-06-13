@@ -1,5 +1,5 @@
-name: "Build DPF Package"
-description: "Builds the DPF package"
+name: "Test DPF Package"
+description: "Tests the DPF package"
 inputs:
   MODULE:
     description: "Module name"
