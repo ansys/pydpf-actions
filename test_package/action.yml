@@ -40,7 +40,7 @@ runs:
         cd tests
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
-        pytest --durations=10 --durations-min=1.0 --cov=ansys.dpf.post --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
+        pytest --durations=10 --durations-min=1.0 --cov=ansys.dpf.${{inputs.MODULE}} --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
