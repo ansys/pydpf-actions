@@ -54,7 +54,7 @@ runs:
     - name: "Test API 2"
       shell: bash
       run: |
-        cd ../local_server_test
+        cd local_server_test
         pytest --durations=10 --durations-min=1.0 --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results2.xml --reruns 2 .
       if: ${{inputs.MODULE}} == "core"
 
