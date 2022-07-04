@@ -80,7 +80,7 @@ runs:
         export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
-        make html 
+        xvfb-run make html 
 
 #        &>log_html.txt
 
