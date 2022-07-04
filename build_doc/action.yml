@@ -33,6 +33,12 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
+    - name: "Install OS packages"
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install pandoc texlive-latex-extra latexmk
+
     - name: "Install DPF"
       uses: pyansys/pydpf-actions/install-dpf-server@v2.1
       with:
@@ -83,8 +89,6 @@ runs:
       working-directory: docs
       run: |
         export TEMP=${{ runner.temp }}
-        sudo apt update
-        sudo apt install pandoc texlive-latex-extra latexmk
         echo "Making pdf doc..."
         make pdf 
 
@@ -97,10 +101,10 @@ runs:
         path: docs/*.txt
 
     - name: "Zip Documentation"
-      shell: bash
-      run: |
-        ls docs/
-        7z a -tzip docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip docs/build
+      uses: vimtor/action-zip@v1
+      with:
+        files: docs/build
+        dest: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Upload Documentation"
       uses: actions/upload-artifact@v2
