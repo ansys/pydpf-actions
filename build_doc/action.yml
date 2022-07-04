@@ -84,7 +84,7 @@ runs:
       run: |
         export TEMP=${{ runner.temp }}
         sudo apt update
-        sudo apt install texlive-latex-extra latexmk
+        sudo apt install pandoc texlive-latex-extra latexmk
         echo "Making pdf doc..."
         make pdf 
 
