@@ -74,7 +74,9 @@ runs:
         export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
-        make html &>log_html.txt
+        make html 
+
+#        &>log_html.txt
 
     - name: "Build PDF Documentation"
       shell: bash
