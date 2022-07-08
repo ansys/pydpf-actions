@@ -89,7 +89,7 @@ runs:
     - name: "Build PDF Documentation"
       shell: bash
       working-directory: docs
-      if: ${{ inputs.generate_pdf }} == "True"
+      if: ${{ inputs.generate_pdf == 'True' }}
       run: |
         export TEMP=${{ runner.temp }}
         echo "Making pdf doc..."
