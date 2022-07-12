@@ -24,6 +24,10 @@ inputs:
   build_extras:
     description: "Extra paths to build the doc for in the spinx-api command"
     required: false
+  generate_pdf:
+    description: "Whether to generate the PDF doc"
+    required: false
+    default: "True"
 
 runs:
   using: "composite"
@@ -80,19 +84,16 @@ runs:
         export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
-        make html 
-
-#        &>log_html.txt
+        make html &>log_html.txt
 
     - name: "Build PDF Documentation"
       shell: bash
       working-directory: docs
+      if: ${{ inputs.generate_pdf == 'True' }}
       run: |
         export TEMP=${{ runner.temp }}
         echo "Making pdf doc..."
-        make pdf 
-
-#        &>log_pdf.txt
+        make pdf &>log_pdf.txt
 
     - name: "Upload Documentation Build log"
       uses: actions/upload-artifact@v2
