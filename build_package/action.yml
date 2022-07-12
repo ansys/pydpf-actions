@@ -39,12 +39,12 @@ runs:
     - name: "Install gatebin Windows"
       if: runner.os == 'Windows'
       shell: bash
-      run: pip install .\.github\workflows\ansys_dpf_gatebin-0.1.dev1-py3-none-win_amd64.whl
+      run: pip install ./.github/workflows/ansys_dpf_gatebin-0.1.dev1-py3-none-win_amd64.whl
 
     - name: "Install gatebin Linux"
       if: runner.os == 'Linux'
       shell: bash
-      run: pip install .\.github\workflows\ansys_dpf_gatebin-0.1.dev1-py3-none-linux_x86_64.whl
+      run: pip install ./.github/workflows/ansys_dpf_gatebin-0.1.dev1-py3-none-linux_x86_64.whl
 
     - name: "Install pygate"
       shell: bash
