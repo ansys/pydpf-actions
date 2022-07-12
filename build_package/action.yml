@@ -37,12 +37,12 @@ runs:
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install gatebin Windows"
-      if: matrix.os == 'windows-latest'
+      if: runner.os == 'Windows'
       shell: bash
       run: pip install .\.github\workflows\ansys_dpf_gatebin-0.1.dev1-py3-none-win_amd64.whl
 
     - name: "Install gatebin Linux"
-      if: matrix.os == 'ubuntu-latest'
+      if: runner.os == 'Linux'
       shell: bash
       run: pip install .\.github\workflows\ansys_dpf_gatebin-0.1.dev1-py3-none-linux_x86_64.whl
 
