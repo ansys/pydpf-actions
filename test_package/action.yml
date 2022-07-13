@@ -18,7 +18,7 @@ runs:
     - name: "Install Test Environment"
       shell: bash
       run: |
-        pip install -r requirements_test.txt
+        pip install -r requirements/requirements_test.txt
 
     - name: "Set TMP"
       shell: bash

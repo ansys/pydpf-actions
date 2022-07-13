@@ -69,7 +69,7 @@ runs:
     - name: "Install documentation requirements"
       shell: bash
       run: |
-        pip install -r requirements_docs.txt
+        pip install -r requirements/requirements_docs.txt
 
     - name: "Build sphinx doc"
       shell: bash
