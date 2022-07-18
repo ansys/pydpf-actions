@@ -5,6 +5,9 @@ inputs:
     description: "Module name"
     required: true
     default: post
+  DEBUG:
+    description: "Debug print mode"
+    required: false
 
 runs:
   using: "composite"
@@ -24,12 +27,18 @@ runs:
         echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
       if: ${{ runner.os }} == "Linux"
 
+    - name: "Debug mode"
+      shell: bash
+      if: ${{ inputs.DEBUG }} == "true"
+      run: |
+        echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV
+
     - name: "Test API Docstrings"
       shell: bash
       run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
-        pytest --doctest-modules --durations=10 --durations-min=1.0 --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
+        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
@@ -49,13 +58,13 @@ runs:
         cd tests
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
-        pytest --durations=10 --durations-min=1.0 --cov=ansys.dpf.${{inputs.MODULE}} --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
+        pytest $DEBUG --cov=ansys.dpf.${{inputs.MODULE}} --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Test API 2"
       shell: bash
       run: |
         cd local_server_test
-        pytest --durations=10 --durations-min=1.0 --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results2.xml --reruns 2 .
+        pytest $DEBUG --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results2.xml --reruns 2 .
       if: ${{inputs.MODULE}} == "core"
 
     - name: "Kill all servers"
