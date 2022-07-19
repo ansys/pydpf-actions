@@ -70,7 +70,7 @@ runs:
     - name: "Test import"
       shell: bash
       working-directory: tests
-      run: python -c "from ansys.dpf import ${{inputs.MODULE}}; print(${{inputs.MODULE}}.Report(gpu=False))"
+      run: python -c "from ansys.dpf import ${{inputs.MODULE}}"
 
     - name: "Retrieve package version"
       shell: bash
