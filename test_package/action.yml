@@ -56,7 +56,7 @@ runs:
       shell: pwsh
       run: |
         New-Item -Path ".\" -Name "local_server_test" -ItemType "directory"
-        Copy-Item -Path "tests\test_local_server.py","tests\test_multi_server.py", "tests\test_workflow.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_local_server.py","tests\test_multi_server.py", "tests\test_workflow.py", "tests\test_remote_workflow.py", "tests\test_remote_operator.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\conftest.py" -Destination ".\local_server_test\conftest.py"
         Remove-Item -Path "tests\test_local_server.py","tests\test_multi_server.py", "tests\test_workflow.py"
       if: ${{inputs.MODULE}} == "core"
