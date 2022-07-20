@@ -8,6 +8,10 @@ inputs:
   DEBUG:
     description: "Debug print mode"
     required: false
+  DOCTEST:
+    description: "Whether to test the docstrings"
+    required: true
+    default: "true"
 
 runs:
   using: "composite"
@@ -37,6 +41,7 @@ runs:
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Test API Docstrings"
+      if: inputs.DOCTEST == true
       shell: bash
       run: |
         echo "TMP: "$TMP
@@ -44,6 +49,7 @@ runs:
         pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
+      if: inputs.DOCTEST == true
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Separate long Core tests"
