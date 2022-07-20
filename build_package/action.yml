@@ -21,6 +21,14 @@ inputs:
   install_extras:
     description: "Extras to install for the local package"
     required: false
+  wheelhouse:
+    description: "Whether to generate a wheelhouse"
+    required: false
+    default: "false"
+  wheel:
+    description: "Whether to upload the wheel"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -80,28 +88,31 @@ runs:
       id: version
 
     - name: "Upload wheel to artifacts"
+      if: ${{ inputs.wheel }} == "true"
       uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
-      if: ${{ inputs.python-version }} == '3.8' && ${{ runner.os }} == 'Windows'
 
-#    - name: Generate wheelhouse
-#      shell: bash
-#      run: pip wheel . -w wheelhouse
-#
-#    - name: Zip wheelhouse
-#      uses: vimtor/action-zip@v1
-#      with:
-#        files: wheelhouse
-#        dest: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}.zip
-#
-#    - name: Upload wheelhouse to artifacts
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
-#        path: '*.zip'
-#        retention-days: 7
+    - name: "Generate wheelhouse"
+      if: ${{ inputs.wheelhouse }} != "false"
+      shell: bash
+      run: pip wheel . -w wheelhouse
+
+    - name: "Zip wheelhouse"
+      if: ${{ inputs.wheelhouse }} != "false"
+      uses: vimtor/action-zip@v1
+      with:
+        files: wheelhouse
+        dest: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}.zip
+
+    - name: "Upload wheelhouse to artifacts"
+      if: ${{ inputs.wheelhouse }} != "false"
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
+        path: '*.zip'
+        retention-days: 7
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
