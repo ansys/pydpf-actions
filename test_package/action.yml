@@ -56,9 +56,19 @@ runs:
       shell: pwsh
       run: |
         New-Item -Path ".\" -Name "local_server_test" -ItemType "directory"
-        Copy-Item -Path "tests\test_local_server.py","tests\test_multi_server.py", "tests\test_workflow.py", "tests\test_remote_workflow.py", "tests\test_remote_operator.py" -Destination ".\local_server_test\"
-        Copy-Item -Path "tests\conftest.py" -Destination ".\local_server_test\conftest.py"
-        Remove-Item -Path "tests\test_local_server.py","tests\test_multi_server.py", "tests\test_workflow.py", "tests\test_remote_workflow.py", "tests\test_remote_operator.py"
+        Copy-Item -Path "tests\conftest.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_server.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_local_server.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_multi_server.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_workflow.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_remote_workflow.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_remote_operator.py" -Destination ".\local_server_test\"
+        Remove-Item -Path "tests\test_server.py"
+        Remove-Item -Path "tests\test_local_server.py"
+        Remove-Item -Path "tests\test_multi_server.py"
+        Remove-Item -Path "tests\test_workflow.py"
+        Remove-Item -Path "tests\test_remote_workflow.py"
+        Remove-Item -Path "tests\test_remote_operator.py"
       if: ${{inputs.MODULE}} == "core"
 
     - name: "Test API"
