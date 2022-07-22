@@ -39,7 +39,7 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.2
+      uses: pyansys/pydpf-actions/install-dpf-server@v2.2.1
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
