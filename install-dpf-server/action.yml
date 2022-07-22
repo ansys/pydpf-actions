@@ -21,17 +21,17 @@ runs:
         $TEMP2 = $TEMP.ToString()
         $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
         $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
-        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone -C v${{inputs.ANSYS_VERSION}}
+        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone/v${{inputs.ANSYS_VERSION}}
       shell: pwsh
       
     - run: |
           if ("${{runner.os}}" -eq "Linux")
           {
-            echo "SERVER=${{github.workspace}}/v${{inputs.ANSYS_VERSION}}/dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+            echo "SERVER=${{github.workspace}}/dpf-standalone/v${{inputs.ANSYS_VERSION}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
           }
           else
           {
-            echo "SERVER=${{github.workspace}}\v${{inputs.ANSYS_VERSION}}\dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+            echo "SERVER=${{github.workspace}}\dpf-standalone\v${{inputs.ANSYS_VERSION}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
           }
            
       shell: pwsh
