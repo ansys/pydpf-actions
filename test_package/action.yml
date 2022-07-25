@@ -41,7 +41,7 @@ runs:
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Test API Docstrings"
-      if: inputs.DOCTEST == true
+      if: inputs.DOCTEST == "true"
       shell: bash
       run: |
         echo "TMP: "$TMP
@@ -49,7 +49,7 @@ runs:
         pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      if: inputs.DOCTEST == true
+      if: inputs.DOCTEST == "true"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Separate long Core tests"
@@ -61,7 +61,7 @@ runs:
         Copy-Item -Path "tests\test_server.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\test_local_server.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\test_multi_server.py" -Destination ".\local_server_test\"
-        Copy-Item -Path "tests\test_workflow.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_workflow.py" -Destination ".\workflow_test\"
         Copy-Item -Path "tests\test_remote_workflow.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\test_remote_operator.py" -Destination ".\local_server_test\"
         Remove-Item -Path "tests\test_server.py"
@@ -89,6 +89,16 @@ runs:
       run: |
         cd local_server_test
         pytest $DEBUG --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results2.xml --reruns 2 .
+      if: ${{inputs.MODULE}} == "core"
+
+    - name: "Kill all servers"
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      
+    - name: "Test API 3"
+      shell: bash
+      run: |
+        cd workflow_test
+        pytest $DEBUG --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results3.xml --reruns 2 .
       if: ${{inputs.MODULE}} == "core"
 
     - name: "Kill all servers"
