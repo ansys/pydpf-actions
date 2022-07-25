@@ -1,0 +1,29 @@
+name: "Test docstrings of DPF Package"
+description: "Test docstrings of DPF Package"
+inputs:
+  MODULE:
+    description: "Module name"
+    required: true
+    default: post
+  PACKAGE_NAME:
+    description: "Package name"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Test API Docstrings"
+      shell: bash
+      run: |
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
+        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
+
+    - name: "Kill all servers"
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+
+    - name: "Upload Docstring Test Results"
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ inputs.PACKAGE_NAME }}_doctest
+        path: junit/test-doctests-results.xml

@@ -1,0 +1,31 @@
+name: "Prepare Testing environment for DPF Package"
+description: "Prepare Testing environment for DPF Package"
+inputs:
+  DEBUG:
+    description: "Debug print mode"
+    required: true
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Setup headless display"
+      uses: pyvista/setup-headless-display-action@v1
+
+    - name: "Install Test Environment"
+      shell: bash
+      run: |
+        pip install -r requirements/requirements_test.txt
+
+    - name: "Set TMP"
+      shell: bash
+      run: |
+        echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
+        echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
+      if: runner.os == 'Linux'
+
+    - name: "Debug mode"
+      shell: bash
+      if: inputs.DEBUG == 'true'
+      run: |
+        echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV

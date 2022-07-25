@@ -1,0 +1,24 @@
+name: "Test API of DPF Package"
+description: "Test API of DPF Package"
+inputs:
+  MODULE:
+    description: "Module name"
+    required: true
+    default: post
+  PACKAGE_NAME:
+    description: "Package name"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Test API"
+      shell: bash
+      run: |
+        cd tests
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
+        pytest $DEBUG --cov=ansys.dpf.${{inputs.MODULE}} --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
+
+    - name: "Kill all servers"
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
