@@ -7,7 +7,8 @@ inputs:
     default: post
   DEBUG:
     description: "Debug print mode"
-    required: false
+    required: true
+    default: "false"
   DOCTEST:
     description: "Whether to test the docstrings"
     required: true
@@ -29,11 +30,11 @@ runs:
       run: |
         echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
         echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
-      if: ${{ runner.os }} == "Linux"
+      if: runner.os == Linux
 
     - name: "Debug mode"
       shell: bash
-      if: ${{ inputs.DEBUG }} == "true"
+      if: inputs.DEBUG == true
       run: |
         echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV
 
@@ -41,7 +42,7 @@ runs:
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Test API Docstrings"
-      if: ${{ inputs.DOCTEST }} == "true"
+      if: inputs.DOCTEST == true
       shell: bash
       run: |
         echo "TMP: "$TMP
@@ -49,7 +50,7 @@ runs:
         pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      if: ${{ inputs.DOCTEST }} == "true"
+      if: inputs.DOCTEST == true
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Separate long Core tests"
@@ -71,7 +72,7 @@ runs:
         Remove-Item -Path "tests\test_workflow.py"
         Remove-Item -Path "tests\test_remote_workflow.py"
         Remove-Item -Path "tests\test_remote_operator.py"
-      if: ${{inputs.MODULE}} == "core"
+      if: inputs.MODULE == core
 
     - name: "Test API"
       shell: bash
@@ -89,7 +90,7 @@ runs:
       run: |
         cd local_server_test
         pytest $DEBUG --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results2.xml --reruns 2 .
-      if: ${{inputs.MODULE}} == "core"
+      if: inputs.MODULE == core
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
