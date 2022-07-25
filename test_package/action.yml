@@ -63,6 +63,7 @@ runs:
         Copy-Item -Path "tests\test_local_server.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\test_multi_server.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\test_workflow.py" -Destination ".\workflow_test\"
+        Copy-Item -Path "tests\conftest.py" -Destination ".\workflow_test\"
         Copy-Item -Path "tests\test_remote_workflow.py" -Destination ".\local_server_test\"
         Copy-Item -Path "tests\test_remote_operator.py" -Destination ".\local_server_test\"
         Remove-Item -Path "tests\test_server.py"
