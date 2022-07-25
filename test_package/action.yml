@@ -12,6 +12,7 @@ inputs:
     description: "Whether to test the docstrings"
     required: true
     default: "true"
+    type: string
 
 runs:
   using: "composite"
@@ -49,7 +50,7 @@ runs:
         pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      if: ${{ inputs.DOCTEST }} == "true"
+      if: ${{ inputs.DOCTEST == "true" }}
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Separate long Core tests"
