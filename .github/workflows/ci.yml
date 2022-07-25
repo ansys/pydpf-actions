@@ -46,12 +46,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v4.1.0
-        with:
-          python-version: 3.8
-
-      - id: install-dpf
+      - name: "Install DPF"
+        id: install-dpf
         uses: ./install-dpf-server
         with:
           dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
@@ -62,6 +58,16 @@ jobs:
           cd ${{ steps.install-dpf.outputs.SERVER }}
           ls .
         shell: pwsh
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v4.1.0
+        with:
+          python-version: 3.8
+
+      - name: "Install psutil"
+        shell: bash
+        run: |
+          pip install psutil
 
       - name: "Kill all servers"
         uses: ./kill-dpf-servers
