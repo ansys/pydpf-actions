@@ -46,6 +46,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Python
+        uses: actions/setup-python@v4.1.0
+        with:
+          python-version: 3.8
+
       - id: install-dpf
         uses: ./install-dpf-server
         with:
