@@ -6,6 +6,8 @@ inputs:
     description: "Args given to pip install command"
     default: ""
     type: string
+    required: false
+
 runs:
   using: "composite"
   steps:
