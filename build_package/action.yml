@@ -21,6 +21,10 @@ inputs:
   install_extras:
     description: "Extras to install for the local package"
     required: false
+  extra-pip-args:
+    description: "Args given to pip install command"
+    default: ""
+    type: string
   wheelhouse:
     description: "Whether to generate a wheelhouse"
     required: true
@@ -44,27 +48,9 @@ runs:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
-    - name: "Install gatebin Windows"
-      if: runner.os == 'Windows'
-      shell: bash
-      working-directory: .github\workflows
-      run: pip install ansys_dpf_gatebin-0.1.dev1-py3-none-win_amd64.whl
-
-    - name: "Install gatebin Linux"
-      if: runner.os == 'Linux'
-      shell: bash
-      working-directory: .github\workflows
-      run: pip install ansys_dpf_gatebin-0.1.dev1-py3-none-linux_x86_64.whl
-
-    - name: "Install pygate"
-      shell: bash
-      working-directory: .github\workflows
-      run: |
-        pip install ansys_dpf_gate-0.1.dev1-py3-none-any.whl
-        pip install ansys_grpc_dpf-0.5.dev1-py3-none-any.whl
-
     - name: "Install local package"
       uses: pyansys/pydpf-actions/install-package@v2.2
+      extra-pip-args: ${{inputs.extra-pip-args}}
 
     - name: "Install extras"
       shell: bash

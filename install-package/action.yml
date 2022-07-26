@@ -1,6 +1,11 @@
 name: "Install package"
 description: "Installs the local package using requirements_build.txt and setup.py while 
 creating a wheel"
+inputs:
+  extra-pip-args:
+    description: "Args given to pip install command"
+    default: ""
+    type: string
 runs:
   using: "composite"
   steps:
@@ -11,5 +16,5 @@ runs:
         python setup.py bdist_wheel
         export WHEEL_NAME=`ls dist/*.whl`
         echo ${WHEEL_NAME}
-        pip install ${WHEEL_NAME}
+        pip install ${WHEEL_NAME} ${{ inputs.extra-pip-args }}
         cd tests
