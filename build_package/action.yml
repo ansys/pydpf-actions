@@ -50,7 +50,8 @@ runs:
 
     - name: "Install local package"
       uses: pyansys/pydpf-actions/install-package@v2.2.dev1
-      extra-pip-args: ${{inputs.extra-pip-args}}
+      with:
+        extra-pip-args: ${{inputs.extra-pip-args}}
 
     - name: "Install extras"
       shell: bash
