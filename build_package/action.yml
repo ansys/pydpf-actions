@@ -34,11 +34,6 @@ inputs:
     required: true
     default: "true"
 
-outputs:
-  SERVER:
-    description: "Path to the server"
-    value: ${{ steps.set-server-path.outputs.server-path }}
-
 runs:
   using: "composite"
   steps:
