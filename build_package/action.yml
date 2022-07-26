@@ -56,7 +56,7 @@ runs:
     - name: "Install gatebin Linux"
       if: runner.os == 'Linux'
       shell: bash
-      working-directory: .github/workflows
+      working-directory: '.github\workflows'
       run: |
         pip install ansys_dpf_gatebin-0.1.dev1-py3-none-linux_x86_64.whl
         pip install ansys_dpf_gate-0.1.dev1-py3-none-any.whl
