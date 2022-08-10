@@ -44,13 +44,13 @@ runs:
         sudo apt install pandoc texlive-latex-extra latexmk
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.2
+      uses: pyansys/pydpf-actions/install-dpf-server@v2.2.dev1
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.2
+      uses: pyansys/pydpf-actions/install-package@v2.2.dev1
 
     - name: "Install extras"
       shell: bash
@@ -96,22 +96,24 @@ runs:
         make pdf &>log_pdf.txt
 
     - name: "Upload Documentation Build log"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
+      if: always()
 
-    - name: "Zip Documentation"
-      uses: vimtor/action-zip@v1
+    - name: "Upload HTML Documentation"
+      uses: actions/upload-artifact@v3
       with:
-        files: docs/build
-        dest: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
+        name: HTML-doc-${{inputs.PACKAGE_NAME}}
+        path: ./docs/build/html/*
 
-    - name: "Upload Documentation"
-      uses: actions/upload-artifact@v2
+    - name: "Upload PDF Documentation"
+      uses: actions/upload-artifact@v3
+      if: ${{ inputs.generate_pdf == 'True' }}
       with:
-        name: doc-${{inputs.PACKAGE_NAME}}
-        path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
+        name: PDF-doc-${{inputs.PACKAGE_NAME}}
+        path: ./docs/build/latex/*.pdf
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2.dev1
