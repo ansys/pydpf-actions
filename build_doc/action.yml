@@ -102,18 +102,30 @@ runs:
         path: docs/*.txt
       if: always()
 
+    - name: "Zip HTML Documentation"
+      uses: vimtor/action-zip@v1
+      with:
+        files: ./docs/build/html/*
+        dest: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
+
     - name: "Upload HTML Documentation"
       uses: actions/upload-artifact@v3
       with:
         name: HTML-doc-${{inputs.PACKAGE_NAME}}
-        path: ./docs/build/html/*
+        path: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
+
+    - name: "Zip PDF Documentation"
+      uses: vimtor/action-zip@v1
+      with:
+        files: ./docs/build/latex/*.pdf
+        dest: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Upload PDF Documentation"
       uses: actions/upload-artifact@v3
       if: ${{ inputs.generate_pdf == 'True' }}
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
-        path: ./docs/build/latex/*.pdf
+        path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2.dev1
