@@ -27,7 +27,7 @@ inputs:
   generate_pdf:
     description: "Whether to generate the PDF doc"
     required: false
-    default: "True"
+    default: "true"
 
 runs:
   using: "composite"
@@ -89,7 +89,7 @@ runs:
     - name: "Build PDF Documentation"
       shell: bash
       working-directory: docs
-      if: ${{ inputs.generate_pdf == 'True' }}
+      if: ${{ inputs.generate_pdf == 'true' }}
       run: |
         export TEMP=${{ runner.temp }}
         echo "Making pdf doc..."
@@ -114,15 +114,27 @@ runs:
         name: HTML-doc-${{inputs.PACKAGE_NAME}}
         path: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
 
+    - name: "Find PDF Documentation"
+      shell: bash
+      if: ${{ inputs.generate_pdf == 'true' }}
+      id: pdf
+      working-directory: docs/build/latex
+      run: |
+        pattern="PyDPF-*.pdf"
+        files=( $pattern )
+        echo "::set-output name=PDF_file::${files[0]}"
+        echo "Found PDF doc: ${files[0]}"
+
     - name: "Zip PDF Documentation"
       uses: vimtor/action-zip@v1
+      if: ${{ inputs.generate_pdf == 'true' }}
       with:
-        files: "docs/build/latex/.*.pdf"
+        files: docs/build/latex/${{ steps.pdf.outputs.PDF_file }}
         dest: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Upload PDF Documentation"
       uses: actions/upload-artifact@v3
-      if: ${{ inputs.generate_pdf == 'True' }}
+      if: ${{ inputs.generate_pdf == 'true' }}
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
         path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
