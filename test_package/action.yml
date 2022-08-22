@@ -1,10 +1,18 @@
-name: "Build DPF Package"
-description: "Builds the DPF package"
+name: "Test DPF Package"
+description: "Tests the DPF package"
 inputs:
   MODULE:
     description: "Module name"
     required: true
     default: post
+  DEBUG:
+    description: "Debug print mode"
+    required: true
+    default: "false"
+  DOCTEST:
+    description: "Whether to test the docstrings"
+    required: true
+    default: "true"
 
 runs:
   using: "composite"
@@ -15,24 +23,77 @@ runs:
     - name: "Install Test Environment"
       shell: bash
       run: |
-        pip install -r requirements_test.txt
+        pip install -r requirements/requirements_test.txt
 
-    - name: "Test API Docstrings"
+    - name: "Set TMP"
       shell: bash
       run: |
-        pytest --doctest-modules --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
+        echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
+        echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
+      if: runner.os == 'Linux'
+
+    - name: "Debug mode"
+      shell: bash
+      if: inputs.DEBUG == 'true'
+      run: |
+        echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+
+    - name: "Test API Docstrings"
+      if: inputs.DOCTEST == 'true'
+      shell: bash
+      run: |
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
+        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
+
+    - name: "Kill all servers"
+      if: inputs.DOCTEST == 'true'
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+
+    - name: "Separate long Core tests"
+      shell: pwsh
+      run: |
+        New-Item -Path ".\" -Name "local_server_test" -ItemType "directory"
+        Copy-Item -Path "tests\conftest.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_launcher.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_server.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_local_server.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_multi_server.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_workflow.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_remote_workflow.py" -Destination ".\local_server_test\"
+        Copy-Item -Path "tests\test_remote_operator.py" -Destination ".\local_server_test\"
+        Remove-Item -Path "tests\test_server.py"
+        Remove-Item -Path "tests\test_launcher.py"
+        Remove-Item -Path "tests\test_local_server.py"
+        Remove-Item -Path "tests\test_multi_server.py"
+        Remove-Item -Path "tests\test_workflow.py"
+        Remove-Item -Path "tests\test_remote_workflow.py"
+        Remove-Item -Path "tests\test_remote_operator.py"
+      if: inputs.MODULE == 'core'
 
     - name: "Test API"
       shell: bash
       run: |
         cd tests
-        pytest -v --cov=ansys.dpf.post --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
+        echo "TMP: "$TMP
+        echo "TEMP: "$TEMP
+        pytest $DEBUG --cov=ansys.dpf.${{inputs.MODULE}} --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+
+    - name: "Test API 2"
+      shell: bash
+      run: |
+        cd local_server_test
+        pytest $DEBUG --cov=ansys.dpf.core --cov-report=xml --cov-report=html --cov-append --log-level=ERROR --junitxml=../tests/junit/test-results2.xml --reruns 2 .
+      if: inputs.MODULE == 'core'
+
+    - name: "Kill all servers"
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
 
     - name: "Upload Docstring Test Results"
       uses: actions/upload-artifact@v2

@@ -21,6 +21,13 @@ inputs:
   install_extras:
     description: "Extras to install for the local package"
     required: false
+  build_extras:
+    description: "Extra paths to build the doc for in the spinx-api command"
+    required: false
+  generate_pdf:
+    description: "Whether to generate the PDF doc"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -30,14 +37,20 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
+    - name: "Install OS packages"
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install pandoc texlive-latex-extra latexmk
+
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.0
+      uses: pyansys/pydpf-actions/install-dpf-server@v2.2.dev1
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.0
+      uses: pyansys/pydpf-actions/install-package@v2.2.dev1
 
     - name: "Install extras"
       shell: bash
@@ -48,7 +61,7 @@ runs:
     - name: "Test import"
       shell: bash
       working-directory: tests
-      run: python -c "from ansys.dpf import ${{inputs.MODULE}}; print(${{inputs.MODULE}}.Report(gpu=False))"
+      run: python -c "from ansys.dpf import ${{inputs.MODULE}}"
 
     - name: "Setup headless display"
       uses: pyvista/setup-headless-display-action@v1
@@ -56,18 +69,19 @@ runs:
     - name: "Install documentation requirements"
       shell: bash
       run: |
-        pip install -r requirements_docs.txt
+        pip install -r requirements/requirements_docs.txt
 
     - name: "Build sphinx doc"
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys -f --implicit-namespaces --separate --no-headings
+        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings &>log_sphinx.txt
 
     - name: "Build HTML Documentation"
       shell: bash
       working-directory: docs
       run: |
+        export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
         make html &>log_html.txt
@@ -75,30 +89,55 @@ runs:
     - name: "Build PDF Documentation"
       shell: bash
       working-directory: docs
+      if: ${{ inputs.generate_pdf == 'true' }}
       run: |
-        sudo apt update
-        sudo apt install texlive-latex-extra latexmk
-        make clean
+        export TEMP=${{ runner.temp }}
         echo "Making pdf doc..."
         make pdf &>log_pdf.txt
 
     - name: "Upload Documentation Build log"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
+      if: always()
 
-    - name: "Zip Documentation"
-      shell: bash
-      run: |
-        ls docs/
-        7z a -tzip docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip docs/build
-
-    - name: "Upload Documentation"
-      uses: actions/upload-artifact@v2
+    - name: "Zip HTML Documentation"
+      uses: vimtor/action-zip@v1
       with:
-        name: doc-${{inputs.PACKAGE_NAME}}
-        path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
+        files: docs/build/html
+        dest: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
+
+    - name: "Upload HTML Documentation"
+      uses: actions/upload-artifact@v3
+      with:
+        name: HTML-doc-${{inputs.PACKAGE_NAME}}
+        path: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
+
+    - name: "Find PDF Documentation"
+      shell: bash
+      if: ${{ inputs.generate_pdf == 'true' }}
+      id: pdf
+      working-directory: docs/build/latex
+      run: |
+        pattern="PyDPF-*.pdf"
+        files=( $pattern )
+        echo "::set-output name=PDF_file::${files[0]}"
+        echo "Found PDF doc: ${files[0]}"
+
+    - name: "Zip PDF Documentation"
+      uses: vimtor/action-zip@v1
+      if: ${{ inputs.generate_pdf == 'true' }}
+      with:
+        files: docs/build/latex/${{ steps.pdf.outputs.PDF_file }}
+        dest: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
+
+    - name: "Upload PDF Documentation"
+      uses: actions/upload-artifact@v3
+      if: ${{ inputs.generate_pdf == 'true' }}
+      with:
+        name: PDF-doc-${{inputs.PACKAGE_NAME}}
+        path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2.dev1

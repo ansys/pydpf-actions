@@ -1,5 +1,12 @@
 name: "Install package"
 description: "Installs the local package using the build library."
+inputs:
+  extra-pip-args:
+    description: "Args given to pip install command"
+    default: ""
+    type: string
+    required: false
+
 runs:
   using: "composite"
   steps:
@@ -10,5 +17,5 @@ runs:
         python -m build --wheel
         export WHEEL_NAME=`ls dist/*.whl`
         echo ${WHEEL_NAME}
-        pip install ${WHEEL_NAME}
+        pip install ${WHEEL_NAME} ${{ inputs.extra-pip-args }}
         cd tests

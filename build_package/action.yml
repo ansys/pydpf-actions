@@ -21,6 +21,18 @@ inputs:
   install_extras:
     description: "Extras to install for the local package"
     required: false
+  extra-pip-args:
+    description: "Args given to pip install command"
+    default: ""
+    type: string
+  wheelhouse:
+    description: "Whether to generate a wheelhouse"
+    required: true
+    default: "false"
+  wheel:
+    description: "Whether to upload the wheel"
+    required: true
+    default: "true"
 
 runs:
   using: "composite"
@@ -31,13 +43,16 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.0
+      id: set-server-path
+      uses: pyansys/pydpf-actions/install-dpf-server@v2.2
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.0
+      uses: pyansys/pydpf-actions/install-package@v2.2.dev1
+      with:
+        extra-pip-args: ${{inputs.extra-pip-args}}
 
     - name: "Install extras"
       shell: bash
@@ -46,12 +61,12 @@ runs:
       if: ${{inputs.install_extras}} != null
 
     - name: "Check licences of packages"
-      uses: pyansys/pydpf-actions/check-licenses@v2.0
+      uses: pyansys/pydpf-actions/check-licenses@v2.2
 
     - name: "Test import"
       shell: bash
       working-directory: tests
-      run: python -c "from ansys.dpf import ${{inputs.MODULE}}; print(${{inputs.MODULE}}.Report(gpu=False))"
+      run: python -c "from ansys.dpf import ${{inputs.MODULE}}"
 
     - name: "Retrieve package version"
       shell: bash
@@ -61,11 +76,31 @@ runs:
       id: version
 
     - name: "Upload wheel to artifacts"
+      if: inputs.wheel == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
-      if: ${{ inputs.python-version }} == '3.8' && ${{ runner.os }} == 'Windows'
+
+    - name: "Generate wheelhouse"
+      if: inputs.wheelhouse == 'true'
+      shell: bash
+      run: pip wheel . -w wheelhouse
+
+    - name: "Zip wheelhouse"
+      if: inputs.wheelhouse == 'true'
+      uses: vimtor/action-zip@v1
+      with:
+        files: wheelhouse
+        dest: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}.zip
+
+    - name: "Upload wheelhouse to artifacts"
+      if: inputs.wheelhouse == 'true'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
+        path: '*.zip'
+        retention-days: 7
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.0
+      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2

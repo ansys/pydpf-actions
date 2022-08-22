@@ -4,10 +4,14 @@ runs:
   using: "composite"
   steps:
     - name: "Kill all servers"
-      shell: bash
+      shell: python
       run: |
-        echo $0
-        if pgrep -x "Ans.Dpf.Grpc" > /dev/null
-        then
-            pkill -f Ans.Dpf.Grpc.exe || true
-        fi        
+        import psutil
+        proc_name = "Ans.Dpf.Grpc"
+        nb_procs = 0
+        for proc in psutil.process_iter():
+            # check whether the process name matches
+            if proc_name in proc.name():
+                proc.kill()
+                nb_procs += 1
+        print(f"Killed {nb_procs} {proc_name} processes.")
