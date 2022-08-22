@@ -50,7 +50,7 @@ runs:
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.2.dev1
+      uses: pyansys/pydpf-actions/install-package@feat/use_build
       with:
         extra-pip-args: ${{inputs.extra-pip-args}}
 
