@@ -112,7 +112,7 @@ runs:
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
-      if: always()
+      if: inputs.debug == 'false'
 
     - name: "Zip HTML Documentation"
       uses: vimtor/action-zip@v1
