@@ -87,7 +87,7 @@ runs:
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings $DEBUG_SPHINX
+        sphinx-apidoc -o docs/source/api src/ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings $DEBUG_SPHINX
 
     - name: "Build HTML Documentation"
       shell: bash
