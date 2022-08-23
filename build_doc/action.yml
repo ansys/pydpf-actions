@@ -43,7 +43,7 @@ runs:
 
     - name: "Debug mode"
       shell: bash
-      if: inputs.debug == 'true'
+      if: inputs.debug == 'false'
       run: |
         echo "DEBUG_SPHINX=&>log_sphinx.txt" >> $GITHUB_ENV
         echo "DEBUG_HTML=&>log_html.txt" >> $GITHUB_ENV
