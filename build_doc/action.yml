@@ -28,6 +28,10 @@ inputs:
     description: "Whether to generate the PDF doc"
     required: false
     default: "true"
+  debug:
+    description: "Output log directly"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -36,6 +40,14 @@ runs:
       uses: actions/setup-python@v2.1.4
       with:
         python-version: ${{ inputs.python-version }}
+
+    - name: "Debug mode"
+      shell: bash
+      if: inputs.debug == 'true'
+      run: |
+        echo "DEBUG_SPHINX=&>log_sphinx.txt" >> $GITHUB_ENV
+        echo "DEBUG_HTML=&>log_html.txt" >> $GITHUB_ENV
+        echo "DEBUG_PDF=&>log_pdf.txt" >> $GITHUB_ENV
 
     - name: "Install OS packages"
       shell: bash
@@ -75,7 +87,7 @@ runs:
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings &>log_sphinx.txt
+        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings $DEBUG_SPHINX
 
     - name: "Build HTML Documentation"
       shell: bash
@@ -84,7 +96,7 @@ runs:
         export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
-        make html
+        make html $DEBUG_HTML
 
     - name: "Build PDF Documentation"
       shell: bash
@@ -93,7 +105,7 @@ runs:
       run: |
         export TEMP=${{ runner.temp }}
         echo "Making pdf doc..."
-        make pdf &>log_pdf.txt
+        make pdf $DEBUG_PDF
 
     - name: "Upload Documentation Build log"
       uses: actions/upload-artifact@v3
