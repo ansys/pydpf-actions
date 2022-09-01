@@ -12,6 +12,9 @@ runs:
         for proc in psutil.process_iter():
             # check whether the process name matches
             if proc_name in proc.name():
-                proc.kill()
-                nb_procs += 1
+                try:
+                  proc.kill()
+                  nb_procs += 1
+                except psutil.NoSuchProcess:
+                  pass
         print(f"Killed {nb_procs} {proc_name} processes.")
