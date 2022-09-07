@@ -10,11 +10,11 @@ runs:
         proc_name = "Ans.Dpf.Grpc"
         nb_procs = 0
         for proc in psutil.process_iter():
+            try:
             # check whether the process name matches
-            if proc_name in proc.name():
-                try:
-                  proc.kill()
-                  nb_procs += 1
-                except psutil.NoSuchProcess:
-                  pass
+              if proc_name in proc.name():
+                    proc.kill()
+                    nb_procs += 1
+            except psutil.NoSuchProcess:
+              pass
         print(f"Killed {nb_procs} {proc_name} processes.")
