@@ -112,7 +112,7 @@ runs:
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
-      if: always()
+      if: inputs.DEBUG == 'false'
 
     - name: "Zip HTML Documentation"
       uses: vimtor/action-zip@v1
@@ -146,10 +146,11 @@ runs:
 
     - name: "Upload PDF Documentation"
       uses: actions/upload-artifact@v3
-      if: ${{ inputs.generate_pdf == 'true' }}
+      if: inputs.generate_pdf == 'true' && inputs.DEBUG == 'false'
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
         path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2.dev1
+      if: always()
