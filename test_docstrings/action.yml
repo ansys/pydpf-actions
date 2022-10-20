@@ -8,10 +8,19 @@ inputs:
   PACKAGE_NAME:
     description: "Package name"
     required: true
+  working-directory:
+    description: "Working-directory"
+    required: false
+    default: "."
 
 runs:
   using: "composite"
   steps:
+    - name: "Set working directory"
+      shell: bash
+      run: |
+        cd ${{ inputs.working-directory }}
+
     - name: "Test API Docstrings"
       shell: bash
       run: |
