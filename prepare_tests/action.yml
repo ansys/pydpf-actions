@@ -28,4 +28,4 @@ runs:
       shell: bash
       if: inputs.DEBUG == 'true'
       run: |
-        echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV
+        echo "DEBUG=-v -s --durations=10 --durations-min=1.0" >> $GITHUB_ENV
