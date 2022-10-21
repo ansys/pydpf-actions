@@ -5,19 +5,10 @@ inputs:
     description: "Debug print mode"
     required: true
     default: "false"
-  working-directory:
-    description: "Working-directory"
-    required: false
-    default: "."
 
 runs:
   using: "composite"
   steps:
-    - name: "Set working directory"
-      shell: bash
-      run: |
-        cd ${{ inputs.working-directory }}
-
     - name: "Setup headless display"
       uses: pyvista/setup-headless-display-action@v1
 
