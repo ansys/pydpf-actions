@@ -11,7 +11,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Commit Doc to release branch"
+    - name: "Create a commit"
       shell: pwsh
       run: |
         cd docs/build/html
@@ -26,7 +26,7 @@ runs:
         GH_DOC_BRANCH: gh-pages
         GH_EMAIL: pyansys.github.bot@ansys.com
 
-    - name: "Push Doc to pyansys/DPF-Post-docs"
+    - name: "Push commit to the documentation repository"
       shell: bash
       run: |
         cd docs/build/html

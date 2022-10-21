@@ -27,15 +27,27 @@ inputs:
   generate_pdf:
     description: "Whether to generate the PDF doc"
     required: false
-    default: "True"
+    default: "true"
+  debug:
+    description: "Output log directly"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
     - name: "Setup Python"
-      uses: actions/setup-python@v2.1.4
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: ${{ inputs.python-version }}
+
+    - name: "Debug mode"
+      shell: bash
+      if: inputs.debug == 'false'
+      run: |
+        echo "DEBUG_SPHINX=&>log_sphinx.txt" >> $GITHUB_ENV
+        echo "DEBUG_HTML=&>log_html.txt" >> $GITHUB_ENV
+        echo "DEBUG_PDF=&>log_pdf.txt" >> $GITHUB_ENV
 
     - name: "Install OS packages"
       shell: bash
@@ -44,13 +56,13 @@ runs:
         sudo apt install pandoc texlive-latex-extra latexmk
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.2
+      uses: pyansys/pydpf-actions/install-dpf-server@prepare_v2.2
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.2
+      uses: pyansys/pydpf-actions/install-package@prepare_v2.2
 
     - name: "Install extras"
       shell: bash
@@ -75,7 +87,7 @@ runs:
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings &>log_sphinx.txt
+        sphinx-apidoc -o docs/source/api src/ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings $DEBUG_SPHINX
 
     - name: "Build HTML Documentation"
       shell: bash
@@ -84,35 +96,61 @@ runs:
         export TEMP=${{ runner.temp }}
         make clean
         echo "Making html doc..."
-        make html &>log_html.txt
+        make html $DEBUG_HTML
 
     - name: "Build PDF Documentation"
       shell: bash
       working-directory: docs
-      if: ${{ inputs.generate_pdf == 'True' }}
+      if: ${{ inputs.generate_pdf == 'true' }}
       run: |
         export TEMP=${{ runner.temp }}
         echo "Making pdf doc..."
-        make pdf &>log_pdf.txt
+        make pdf $DEBUG_PDF
 
     - name: "Upload Documentation Build log"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
-      if: always()
+      if: inputs.debug == 'false'
 
-    - name: "Zip Documentation"
+    - name: "Zip HTML Documentation"
       uses: vimtor/action-zip@v1
       with:
-        files: docs/build
-        dest: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
+        files: docs/build/html
+        dest: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
 
-    - name: "Upload Documentation"
-      uses: actions/upload-artifact@v2
+    - name: "Upload HTML Documentation"
+      uses: actions/upload-artifact@v3
       with:
-        name: doc-${{inputs.PACKAGE_NAME}}
-        path: docs/archive/doc-${{inputs.PACKAGE_NAME}}.zip
+        name: HTML-doc-${{inputs.PACKAGE_NAME}}
+        path: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
+
+    - name: "Find PDF Documentation"
+      shell: bash
+      if: ${{ inputs.generate_pdf == 'true' }}
+      id: pdf
+      working-directory: docs/build/latex
+      run: |
+        pattern="PyDPF-*.pdf"
+        files=( $pattern )
+        echo "PDF_file=${files[0]}" >> $GITHUB_OUTPUT
+        echo "Found PDF doc: ${files[0]}"
+
+    - name: "Zip PDF Documentation"
+      uses: vimtor/action-zip@v1
+      if: ${{ inputs.generate_pdf == 'true' }}
+      with:
+        files: docs/build/latex/${{ steps.pdf.outputs.PDF_file }}
+        dest: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
+
+    - name: "Upload PDF Documentation"
+      uses: actions/upload-artifact@v3.1.0
+      if: inputs.generate_pdf == 'true'
+      with:
+        name: PDF-doc-${{inputs.PACKAGE_NAME}}
+        path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2
+      if: always()

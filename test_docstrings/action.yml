@@ -8,22 +8,34 @@ inputs:
   PACKAGE_NAME:
     description: "Package name"
     required: true
+  working-directory:
+    description: "Working-directory"
+    required: false
+    default: "."
 
 runs:
   using: "composite"
   steps:
+    - name: "Set working directory"
+      shell: bash
+      run: |
+        echo ${{ inputs.working-directory }}
+        cd ${{ inputs.working-directory }}
+        ls
+
     - name: "Test API Docstrings"
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
         pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2
 
     - name: "Upload Docstring Test Results"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}_doctest
         path: junit/test-doctests-results.xml

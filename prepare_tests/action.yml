@@ -5,14 +5,26 @@ inputs:
     description: "Debug print mode"
     required: true
     default: "false"
+  working-directory:
+    description: "Working-directory"
+    required: false
+    default: "."
 
 runs:
   using: "composite"
   steps:
+    - name: "Set working directory"
+      shell: bash
+      run: |
+        echo ${{ inputs.working-directory }}
+        cd ${{ inputs.working-directory }}
+        ls
+
     - name: "Setup headless display"
       uses: pyvista/setup-headless-display-action@v1
 
     - name: "Install Test Environment"
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
       run: |
         pip install -r requirements/requirements_test.txt
@@ -28,4 +40,4 @@ runs:
       shell: bash
       if: inputs.DEBUG == 'true'
       run: |
-        echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV
+        echo "DEBUG=-v -s --durations=10 --durations-min=1.0" >> $GITHUB_ENV

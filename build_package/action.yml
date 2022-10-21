@@ -21,6 +21,10 @@ inputs:
   install_extras:
     description: "Extras to install for the local package"
     required: false
+  extra-pip-args:
+    description: "Args given to pip install command"
+    default: ""
+    type: string
   wheelhouse:
     description: "Whether to generate a wheelhouse"
     required: true
@@ -34,36 +38,21 @@ runs:
   using: "composite"
   steps:
     - name: "Setup Python"
-      uses: actions/setup-python@v2.1.4
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: ${{ inputs.python-version }}
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.2
+      id: set-server-path
+      uses: pyansys/pydpf-actions/install-dpf-server@prepare_v2.2
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
-    - name: "Install gatebin Windows"
-      if: runner.os == 'Windows'
-      shell: bash
-      working-directory: .github\workflows
-      run: |
-        pip install ansys_dpf_gatebin-0.1.dev1-py3-none-win_amd64.whl
-        pip install ansys_dpf_gate-0.1.dev1-py3-none-any.whl
-        pip install ansys_grpc_dpf-0.5.1-py3-none-any.whl
-
-    - name: "Install gatebin Linux"
-      if: runner.os == 'Linux'
-      shell: bash
-      working-directory: .github/workflows
-      run: |
-        pip install ansys_dpf_gatebin-0.1.dev1-py3-none-linux_x86_64.whl
-        pip install ansys_dpf_gate-0.1.dev1-py3-none-any.whl
-        pip install ansys_grpc_dpf-0.5.1-py3-none-any.whl
-
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.2
+      uses: pyansys/pydpf-actions/install-package@prepare_v2.2
+      with:
+        extra-pip-args: ${{inputs.extra-pip-args}}
 
     - name: "Install extras"
       shell: bash
@@ -72,7 +61,7 @@ runs:
       if: ${{inputs.install_extras}} != null
 
     - name: "Check licences of packages"
-      uses: pyansys/pydpf-actions/check-licenses@v2.2
+      uses: pyansys/pydpf-actions/check-licenses@prepare_v2.2
 
     - name: "Test import"
       shell: bash
@@ -82,13 +71,13 @@ runs:
     - name: "Retrieve package version"
       shell: bash
       run: |
-        echo "::set-output name=VERSION::$(python -c "from ansys.dpf.${{inputs.MODULE}} import __version__; print(__version__)")"
+        echo "VERSION=$(python -c "from ansys.dpf.${{inputs.MODULE}} import __version__; print(__version__)")" >> $GITHUB_OUTPUT
         echo "${{inputs.PACKAGE_NAME}} version is: $(python -c "from ansys.dpf.${{inputs.MODULE}} import __version__; print(__version__)")"
       id: version
 
     - name: "Upload wheel to artifacts"
       if: inputs.wheel == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
@@ -96,7 +85,7 @@ runs:
     - name: "Generate wheelhouse"
       if: inputs.wheelhouse == 'true'
       shell: bash
-      run: pip wheel . -w wheelhouse
+      run: pip wheel . -w wheelhouse ${{inputs.extra-pip-args}}
 
     - name: "Zip wheelhouse"
       if: inputs.wheelhouse == 'true'
@@ -107,11 +96,11 @@ runs:
 
     - name: "Upload wheelhouse to artifacts"
       if: inputs.wheelhouse == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
         path: '*.zip'
         retention-days: 7
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2

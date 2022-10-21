@@ -13,11 +13,11 @@ runs:
   using: "composite"
   steps:
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: 3.9
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3.0.1
 
     - name: Display structure of downloaded files
       shell: bash
@@ -29,33 +29,9 @@ runs:
         python -m pip install --upgrade pip
         pip install setuptools twine
 
-    - name: Build package
-      shell: bash
-      run: python setup.py sdist
-
-    - name: Publish distribution 📦 to TestPyPI
-      shell: bash
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ inputs.PYPI_TOKEN }}
-        TWINE_REPOSITORY_URL: "https://test.pypi.org/simple/"
-      if: ${{ inputs.TEST == "true"}}
-      run: |
-        twine upload --skip-existing ./**/*.whl
-        twine upload --skip-existing ./**/*.tar.gz
-#         /!\ Do NOT publish to Pypi the zip containing the wheelhouses
-
-#    - name: Publish distribution 📦 to PyPI
+#    - name: Build package
 #      shell: bash
-#      env:
-#        TWINE_USERNAME: __token__
-#        TWINE_PASSWORD: ${{ inputs.PYPI_TOKEN }}
-#        TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
-#      if: ${{ inputs.TEST == "false"}}
-#      run: |
-#        twine upload --skip-existing ./**/*.whl
-#        twine upload --skip-existing ./**/*.tar.gz
-##         /!\ Do NOT publish to Pypi the zip containing the wheelhouses
+#      run: python setup.py sdist
 
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -65,3 +41,27 @@ runs:
           ./**/*.tar.gz
           ./**/*.pdf
           ./**/*.zip
+
+    - name: Publish distribution 📦 to TestPyPI
+      shell: bash
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ inputs.PYPI_TOKEN }}
+        TWINE_REPOSITORY_URL: "https://test.pypi.org/simple/"
+      if: inputs.TEST == 'true'
+      run: |
+        twine upload --skip-existing ./**/*.whl
+        twine upload --skip-existing ./**/*.tar.gz
+#         /!\ Do NOT publish to Pypi the zip containing the wheelhouses
+
+    - name: Publish distribution 📦 to PyPI
+      shell: bash
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ inputs.PYPI_TOKEN }}
+        TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
+      if: inputs.TEST == 'false'
+      run: |
+        twine upload --skip-existing ./**/*.whl
+        twine upload --skip-existing ./**/*.tar.gz
+#         /!\ Do NOT publish to Pypi the zip containing the wheelhouses

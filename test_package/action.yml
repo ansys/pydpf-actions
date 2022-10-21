@@ -39,7 +39,7 @@ runs:
         echo "DEBUG=-v --durations=10 --durations-min=1.0" >> $GITHUB_ENV
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2
 
     - name: "Test API Docstrings"
       if: inputs.DOCTEST == 'true'
@@ -47,11 +47,11 @@ runs:
       run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
-        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
+        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml src/ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
       if: inputs.DOCTEST == 'true'
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2
 
     - name: "Separate long Core tests"
       shell: pwsh
@@ -83,7 +83,7 @@ runs:
         pytest $DEBUG --cov=ansys.dpf.${{inputs.MODULE}} --cov-report=xml --cov-report=html --log-level=ERROR --junitxml=junit/test-results.xml --reruns 2 .
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2
 
     - name: "Test API 2"
       shell: bash
@@ -93,16 +93,16 @@ runs:
       if: inputs.MODULE == 'core'
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2
 
     - name: "Upload Docstring Test Results"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}_doctest
         path: junit/test-doctests-results.xml
 
     - name: "Upload Test Results"
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}_pytest
         path: tests/junit/test-results.xml
