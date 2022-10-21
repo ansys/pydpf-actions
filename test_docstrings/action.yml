@@ -19,7 +19,9 @@ runs:
     - name: "Set working directory"
       shell: bash
       run: |
+        echo ${{ inputs.working-directory }}
         cd ${{ inputs.working-directory }}
+        ls
 
     - name: "Test API Docstrings"
       shell: bash

@@ -29,9 +29,9 @@ inputs:
     required: false
     default: "true"
   debug:
-    description: "Verbose mode without log redirection"
+    description: "Output log directly"
     required: false
-    default: 'false'
+    default: "false"
 
 runs:
   using: "composite"
@@ -40,6 +40,14 @@ runs:
       uses: actions/setup-python@v4.3.0
       with:
         python-version: ${{ inputs.python-version }}
+
+    - name: "Debug mode"
+      shell: bash
+      if: inputs.debug == 'false'
+      run: |
+        echo "DEBUG_SPHINX=&>log_sphinx.txt" >> $GITHUB_ENV
+        echo "DEBUG_HTML=&>log_html.txt" >> $GITHUB_ENV
+        echo "DEBUG_PDF=&>log_pdf.txt" >> $GITHUB_ENV
 
     - name: "Install OS packages"
       shell: bash
@@ -75,19 +83,11 @@ runs:
       run: |
         pip install -r requirements/requirements_docs.txt
 
-    - name: "Debug mode"
-      shell: bash
-      if: inputs.debug == 'false'
-      run: |
-        echo "DEBUG_BUILD=&>log_sphinx.txt" >> $GITHUB_ENV
-        echo "DEBUG_HTML=&>log_html.txt" >> $GITHUB_ENV
-        echo "DEBUG_PDF=&>log_pdf.txt" >> $GITHUB_ENV
-
     - name: "Build sphinx doc"
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f -v -v --implicit-namespaces --separate --no-headings $DEBUG_BUILD
+        sphinx-apidoc -o docs/source/api src/ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings $DEBUG_SPHINX
 
     - name: "Build HTML Documentation"
       shell: bash
@@ -146,7 +146,7 @@ runs:
 
     - name: "Upload PDF Documentation"
       uses: actions/upload-artifact@v3.1.0
-      if: inputs.generate_pdf == 'true' && inputs.debug == 'false'
+      if: inputs.generate_pdf == 'true'
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
         path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
