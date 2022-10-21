@@ -134,7 +134,7 @@ runs:
       run: |
         pattern="PyDPF-*.pdf"
         files=( $pattern )
-        echo "::set-output name=PDF_file::${files[0]}"
+        echo "PDF_file=${files[0]}" >> $GITHUB_OUTPUT
         echo "Found PDF doc: ${files[0]}"
 
     - name: "Zip PDF Documentation"
