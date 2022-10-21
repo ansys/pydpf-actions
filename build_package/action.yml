@@ -44,7 +44,7 @@ runs:
 
     - name: "Install DPF"
       id: set-server-path
-      uses: install-dpf-server
+      uses: ./install-dpf-server
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
