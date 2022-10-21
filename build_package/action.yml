@@ -44,7 +44,7 @@ runs:
 
     - name: "Install DPF"
       id: set-server-path
-      uses: install-dpf-server
+      uses: pyansys/pydpf-actions/install-dpf-server@prepare_v2.2
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
