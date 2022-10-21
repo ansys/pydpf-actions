@@ -34,12 +34,12 @@ runs:
   using: "composite"
   steps:
     - name: "Setup Python"
-      uses: actions/setup-python@v2.1.4
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: ${{ inputs.python-version }}
 
     - name: "Install DPF"
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.2
+      uses: pyansys/pydpf-actions/install-dpf-server@prepare_v2.2
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
@@ -63,7 +63,7 @@ runs:
         pip install ansys_grpc_dpf-0.5.1-py3-none-any.whl
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.2
+      uses: pyansys/pydpf-actions/install-package@prepare_v2.2
 
     - name: "Install extras"
       shell: bash
@@ -72,7 +72,7 @@ runs:
       if: ${{inputs.install_extras}} != null
 
     - name: "Check licences of packages"
-      uses: pyansys/pydpf-actions/check-licenses@v2.2
+      uses: pyansys/pydpf-actions/check-licenses@prepare_v2.2
 
     - name: "Test import"
       shell: bash
@@ -88,7 +88,7 @@ runs:
 
     - name: "Upload wheel to artifacts"
       if: inputs.wheel == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
@@ -107,11 +107,11 @@ runs:
 
     - name: "Upload wheelhouse to artifacts"
       if: inputs.wheelhouse == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
         path: '*.zip'
         retention-days: 7
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
+      uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.2

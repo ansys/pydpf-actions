@@ -20,7 +20,7 @@ jobs:
       ANSYS_VERSION: 221
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.5.0
 
       - id: install-dpf
         uses: ./install-dpf-server
@@ -34,7 +34,7 @@ jobs:
           ls .
 
       - name: "Setup Python"
-        uses: actions/setup-python@v4.1.0
+        uses: actions/setup-python@v4.3.0
         with:
           python-version: 3.8
 
@@ -54,7 +54,7 @@ jobs:
       ANSYS_VERSION: 221
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.5.0
 
       - name: "Install DPF"
         id: install-dpf
@@ -70,7 +70,7 @@ jobs:
         shell: pwsh
 
       - name: "Setup Python"
-        uses: actions/setup-python@v4.1.0
+        uses: actions/setup-python@v4.3.0
         with:
           python-version: 3.8
 
