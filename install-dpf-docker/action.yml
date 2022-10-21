@@ -33,8 +33,10 @@ runs:
        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone/v${{inputs.ANSYS_VERSION}}
        ls .
        ls dpf-standalone/
-       
-       zip -qq -r dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip dpf-standalone/v${{inputs.ANSYS_VERSION}}
+      
+       cd dpf-standalone
+       zip -qq -r ../dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip v${{inputs.ANSYS_VERSION}}
+       cd ..
        mv dpf-standalone/v${{inputs.ANSYS_VERSION}}/Dockerfile ./Dockerfile
        rm -r dpf-standalone
        
