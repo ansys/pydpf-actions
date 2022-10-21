@@ -17,7 +17,7 @@ runs:
       run: |
         echo "TMP: "$TMP
         echo "TEMP: "$TEMP
-        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml src/ansys/dpf/${{inputs.MODULE}}
+        pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.2
