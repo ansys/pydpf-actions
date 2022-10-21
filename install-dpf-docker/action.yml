@@ -27,10 +27,13 @@ runs:
        $TEMP2 = $TEMP.ToString()
        $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
        $ANSYS_VERSION_WITH_POINT= $ANSYS_VERSION_WITH_POINT+"_try_update"
-       $BranchName = {"linux_release-$ANSYS_VERSION_WITH_POINT"}
+       $BranchName = "linux_release-"+$ANSYS_VERSION_WITH_POINT
        
        $STANDALONE_PREFIX = if ("${{runner.os}}" -eq "Linux") { "lin" } else { "win" }
        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone/v${{inputs.ANSYS_VERSION}}
+       ls .
+       ls dpf-standalone/
+       
        zip -qq -r dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip dpf-standalone/v${{inputs.ANSYS_VERSION}}
        mv dpf-standalone/v${{inputs.ANSYS_VERSION}}/Dockerfile ./Dockerfile
        rm -r dpf-standalone
