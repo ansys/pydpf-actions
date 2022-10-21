@@ -1,0 +1,45 @@
+name: "Install DPF Server"
+description: "Install and test DPF Server for different OS and versions"
+inputs:
+  dpf-standalone-TOKEN:
+    description: "github secret to access https://github.com/ansys-dpf/dpf-standalone"
+    required: true
+  ANSYS_VERSION:
+    description: "Ansys release version number in the format 221"
+    required: false
+    default: "231"
+outputs:
+  SERVER:
+    description: "Path to the server"
+    value: ${{ steps.set-server-path.outputs.server-path }}
+runs:
+  using: "composite"
+  steps:
+   - name: Install zip
+     uses: montudor/action-zip@v1
+
+    - id: set-STANDALONE_PREFIX
+      run: |
+          $PREFIX = if ("${{runner.os}}" -eq "Linux") { "lin" } else { "win" }
+          echo "::set-output name=$PREFIX::$(echo ${STANDALONE_PREFIX})"
+      shell: bash
+      if: ${{ runner.os }}
+
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - run: |
+        echo ${{runner.os}}
+        $TEMP = ${{inputs.ANSYS_VERSION}}
+        $TEMP2 = $TEMP.ToString()
+        $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
+        $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
+        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone/v${{inputs.ANSYS_VERSION}}
+        zip -qq -r dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip dpf-standalone/v${{inputs.ANSYS_VERSION}}
+        mv dpf-standalone/v${{inputs.ANSYS_VERSION}}/Dockerfile ./Dockerfile
+        rm -r dpf-standalone
+        
+        echo "::set-output name=dpfv20${ANSYS_VERSION_WITH_POINT}.0::$(echo ${DPF_DOCKER})"
+        docker build -t $DPF_DOCKER --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_STANDALONE_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
+      shell: pwsh
