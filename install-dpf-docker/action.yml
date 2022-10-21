@@ -38,6 +38,6 @@ runs:
        mv dpf-standalone/v${{inputs.ANSYS_VERSION}}/Dockerfile ./Dockerfile
        rm -r dpf-standalone
        
-       echo "::set-output name=dpfv20${ANSYS_VERSION_WITH_POINT}.0::$(echo ${DPF_DOCKER})"
+       echo "::set-output name=dpfv20${ANSYS_VERSION_WITH_POINT}.0::echo DPF_DOCKER)"
        docker build -t $DPF_DOCKER --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_STANDALONE_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
      shell: pwsh
