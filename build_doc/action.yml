@@ -29,17 +29,25 @@ inputs:
     required: false
     default: "true"
   debug:
-    description: "Verbose mode without log redirection"
+    description: "Output log directly"
     required: false
-    default: 'false'
+    default: "false"
 
 runs:
   using: "composite"
   steps:
     - name: "Setup Python"
-      uses: actions/setup-python@v2.1.4
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: ${{ inputs.python-version }}
+
+    - name: "Debug mode"
+      shell: bash
+      if: inputs.debug == 'false'
+      run: |
+        echo "DEBUG_SPHINX=&>log_sphinx.txt" >> $GITHUB_ENV
+        echo "DEBUG_HTML=&>log_html.txt" >> $GITHUB_ENV
+        echo "DEBUG_PDF=&>log_pdf.txt" >> $GITHUB_ENV
 
     - name: "Install OS packages"
       shell: bash
@@ -87,7 +95,7 @@ runs:
       shell: bash
       run: |
         export SPHINX_APIDOC_OPTIONS=inherited-members
-        sphinx-apidoc -o docs/source/api ansys ${{inputs.build_extras}} -f -v -v --implicit-namespaces --separate --no-headings $DEBUG_BUILD
+        sphinx-apidoc -o docs/source/api src/ansys ${{inputs.build_extras}} -f --implicit-namespaces --separate --no-headings $DEBUG_SPHINX
 
     - name: "Build HTML Documentation"
       shell: bash
@@ -108,7 +116,7 @@ runs:
         make pdf $DEBUG_PDF
 
     - name: "Upload Documentation Build log"
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
@@ -134,7 +142,7 @@ runs:
       run: |
         pattern="PyDPF-*.pdf"
         files=( $pattern )
-        echo "::set-output name=PDF_file::${files[0]}"
+        echo "PDF_file=${files[0]}" >> $GITHUB_OUTPUT
         echo "Found PDF doc: ${files[0]}"
 
     - name: "Zip PDF Documentation"
@@ -145,8 +153,8 @@ runs:
         dest: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Upload PDF Documentation"
-      uses: actions/upload-artifact@v3
-      if: inputs.generate_pdf == 'true' && inputs.debug == 'false'
+      uses: actions/upload-artifact@v3.1.0
+      if: inputs.generate_pdf == 'true'
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
         path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
