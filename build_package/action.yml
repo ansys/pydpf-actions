@@ -87,8 +87,7 @@ runs:
       shell: bash
       run: |
         pip list
-        ls dist/
-        pip wheel --no-clean -w wheelhouse ${{inputs.extra-pip-args}} ./dist/${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
+        pip wheel -w wheelhouse ${{inputs.extra-pip-args}} .
 
     - name: "Zip wheelhouse"
       if: inputs.wheelhouse == 'true'

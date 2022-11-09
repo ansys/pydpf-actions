@@ -13,7 +13,8 @@ runs:
     - name: "Install local package"
       shell: bash
       run: |
-        pip install build
+        pip install build        
+        pip install wheel
         python -m build --wheel
         export WHEEL_NAME=`ls dist/*.whl`
         echo ${WHEEL_NAME}
