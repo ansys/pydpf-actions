@@ -87,8 +87,7 @@ runs:
       shell: bash
       run: |
         pip install wheel
-        pip list
-        pip wheel -w wheelhouse ${{inputs.extra-pip-args}} .
+        pip wheel . -w wheelhouse ${{inputs.extra-pip-args}}
 
     - name: "Zip wheelhouse"
       if: inputs.wheelhouse == 'true'
