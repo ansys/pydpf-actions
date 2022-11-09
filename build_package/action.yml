@@ -86,8 +86,7 @@ runs:
       if: inputs.wheelhouse == 'true'
       shell: bash
       run: |
-        pip freeze > requirements_wheelhouse.txt
-        pip wheel -r requirements_wheelhouse.txt -w wheelhouse ${{inputs.extra-pip-args}}
+        pip wheel . -w wheelhouse ${{inputs.extra-pip-args}} --f ./dist/
 
     - name: "Zip wheelhouse"
       if: inputs.wheelhouse == 'true'
