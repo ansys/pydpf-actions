@@ -26,7 +26,6 @@ runs:
        $TEMP = ${{inputs.ANSYS_VERSION}}
        $TEMP2 = $TEMP.ToString()
        $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
-       $ANSYS_VERSION_WITH_POINT= $ANSYS_VERSION_WITH_POINT+"_try_update"
        $BranchName = "linux_release-"+$ANSYS_VERSION_WITH_POINT
        
        $STANDALONE_PREFIX = if ("${{runner.os}}" -eq "Linux") { "lin" } else { "win" }
