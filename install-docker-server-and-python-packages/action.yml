@@ -44,7 +44,7 @@ runs:
 
     - name: "Install DPF"
       id: set-server-path
-      uses: pyansys/pydpf-actions/install-dpf-docker@v2.2
+      uses: pyansys/pydpf-actions/install-dpf-docker@fix/docker_test_232
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
