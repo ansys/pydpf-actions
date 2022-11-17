@@ -87,3 +87,10 @@ runs:
       if: env.MODE == 'LEGACY'
       shell: pwsh
       run: Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
+
+    - name: "Pip install the server"
+      if: env.MODE == 'PIP'
+      shell: bash
+      working-directory: dpf-standalone/v${{inputs.ANSYS_VERSION}}
+      run: |
+        pip install -e .
