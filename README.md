@@ -12,7 +12,7 @@ The action  named `install-dpf-server` is hosted in this repository.
 To use `install-dpf-server` in a github workflow, add this step:
 ```
 - id: install-dpf
-  uses: pyansys/pydpf-actions/install-dpf-server@prepare_v2.3
+  uses: pyansys/pydpf-actions/install-dpf-server@v2.3
   with:
     dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
     ANSYS_VERSION : 221
@@ -31,7 +31,7 @@ It is used by the `build_package` and `build_doc` actions.
 To use `install-package` in a github workflow, add this step:
 ```
 - name: "Install local package"
-  uses: pyansys/pydpf-actions/install-package@prepare_v2.3
+  uses: pyansys/pydpf-actions/install-package@v2.3
 ```
 
 #### Supported options
@@ -46,7 +46,7 @@ It installs and builds the local package, and then uploads the wheel as artifact
 To use `build_package` in a github workflow, add this step:
 ```
 - id: build_package
-  uses: pyansys/pydpf-actions/build_package@prepare_v2.3
+  uses: pyansys/pydpf-actions/build_package@v2.3
   with:
     python-version: ********
     ANSYS_VERSION: ********
@@ -74,7 +74,7 @@ uploads the test results as artifacts.
 To use `test_package` in a github workflow, add this step:
 ```
 - id: test_package
-  uses: pyansys/pydpf-actions/test_package@prepare_v2.3
+  uses: pyansys/pydpf-actions/test_package@v2.3
   with:
     MODULE: ********
 ```
@@ -93,7 +93,7 @@ are released.
 To use `release_package` in a github workflow, add this step:
 ```
 - name: Release Package
-  uses: pyansys/pydpf-actions/release_package@prepare_v2.3
+  uses: pyansys/pydpf-actions/release_package@v2.3
   with:
     PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 ```
@@ -111,7 +111,7 @@ It then zips it and uploads it as artifact.
 To use `build_doc` in a github workflow, add this step:
 ```
 - id: build_doc
-  uses: pyansys/pydpf-actions/build_doc@prepare_v2.3
+  uses: pyansys/pydpf-actions/build_doc@v2.3
   with:
     python-version: "3.8"
     ANSYS_VERSION: 221
@@ -140,7 +140,7 @@ It pushes the previously generated documentation to the release branch and the p
 To use `push_doc` in a github workflow, add this step:
 ```
 - name: "Push Documentation"
-  uses: pyansys/pydpf-actions/push_doc@prepare_v2.3
+  uses: pyansys/pydpf-actions/push_doc@v2.3
   with:
     PYANSYS_CI_BOT_TOKEN: ${{secrets.PYANSYS_CI_BOT_TOKEN}}
     DOC_REPO: DPF-Post-docs
@@ -160,7 +160,7 @@ It is used by the `build_package`, `test_package` and `build_doc` actions.
 To use `kill-dpf-servers` in a github workflow, add this step:
 ```
 - name: "Kill all servers"
-  uses: pyansys/pydpf-actions/kill-dpf-servers@prepare_v2.3
+  uses: pyansys/pydpf-actions/kill-dpf-servers@v2.3
 ```
 
 #### Supported options
@@ -176,7 +176,7 @@ It is used by the `build_package` action.
 To use `check-licenses` in a github workflow, add this step:
 ```
 - name: "Check licences of packages"
-  uses: pyansys/pydpf-actions/check-licenses@prepare_v2.3
+  uses: pyansys/pydpf-actions/check-licenses@v2.3
 ```
 
 #### Supported options
