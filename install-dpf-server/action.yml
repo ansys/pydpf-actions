@@ -25,7 +25,7 @@ runs:
         $TEMP = ${{inputs.ANSYS_VERSION}}
         $TEMP2 = $TEMP.ToString()
         $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
-        if (${{inputs.standalone_suffix}})
+        if ("${{inputs.standalone_suffix}}")
         {
           $ANSYS_VERSION_WITH_POINT += "${{inputs.standalone_suffix}}"
         }
