@@ -33,6 +33,11 @@ inputs:
     description: "Whether to upload the wheel"
     required: true
     default: "true"
+  standalone_suffix:
+    description: "Suffix of the branch on standalone"
+    required: false
+    type: string
+    default: ''
 
 runs:
   using: "composite"
@@ -47,6 +52,7 @@ runs:
       uses: pyansys/pydpf-actions/install-dpf-server@v2.3
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
+        standalone_suffix: ${{inputs.standalone_suffix}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
