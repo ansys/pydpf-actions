@@ -34,7 +34,6 @@ runs:
       run: |
         echo "TMP=${{ runner.temp }}" >> $GITHUB_ENV
         echo "TEMP=${{ runner.temp }}" >> $GITHUB_ENV
-      if: runner.os == 'Linux'
 
     - name: "Debug mode"
       shell: bash

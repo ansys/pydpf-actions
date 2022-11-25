@@ -20,7 +20,10 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - name: "Clone DPF"
+      id: clone
+      shell: pwsh
+      run: |
         echo ${{runner.os}}
         $TEMP = ${{inputs.ANSYS_VERSION}}
         $TEMP2 = $TEMP.ToString()
@@ -31,9 +34,27 @@ runs:
         }
         $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone/v${{inputs.ANSYS_VERSION}}
+
+    - name: "Define installation mode"
+      id: mode
       shell: pwsh
-      
-    - run: |
+      run: |
+        $version_int = [int]${{inputs.ANSYS_VERSION}}
+        $ref = "232"
+        $ref_int = [int]$ref
+        if ($version_int -lt $ref_int)
+        {
+          echo "MODE=LEGACY"| Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        }
+        else
+        {
+          echo "MODE=PIP" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        }
+
+    - name: "Set the SERVER output as the path to the server"
+      if: env.MODE == 'LEGACY'
+      shell: pwsh
+      run: |
           if ("${{runner.os}}" -eq "Linux")
           {
             echo "SERVER=${{github.workspace}}/dpf-standalone/v${{inputs.ANSYS_VERSION}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
@@ -42,18 +63,23 @@ runs:
           {
             echo "SERVER=${{github.workspace}}\dpf-standalone\v${{inputs.ANSYS_VERSION}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
           }
-           
-      shell: pwsh
      
-    - id: set-server-path
+    - name: "Set the server-path variable"
+      if: env.MODE == 'LEGACY'
+      id: set-server-path
+      shell: bash
       run: |
           echo "server-path=$(echo ${SERVER})" >> $GITHUB_OUTPUT
-      shell: bash
 
-    - run: echo "AWP_ROOT${{inputs.ANSYS_VERSION}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+    - name: "Set AWP_ROOT environment variable"
+      if: env.MODE == 'LEGACY'
       shell: pwsh
+      run: echo "AWP_ROOT${{inputs.ANSYS_VERSION}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 
-    - run: |
+    - name: "Test the server by running the Ans.Dpf.Grpc executable"
+      if: env.MODE == 'LEGACY'
+      shell: pwsh
+      run: |
         $SubFolder = if ("${{runner.os}}" -eq "Linux") { "linx64" } else { "winx64" }
         echo "SubFolder=$SubFolder"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         cd ${{env.SERVER}}\aisol\bin\$SubFolder
@@ -65,7 +91,15 @@ runs:
         }
         $ToLaunch = if ("${{runner.os}}" -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
         Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
-      shell: pwsh
 
-    - run: Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
+    - name: "Print the server log"
+      if: env.MODE == 'LEGACY'
       shell: pwsh
+      run: Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
+
+    - name: "Pip install the server"
+      if: env.MODE == 'PIP'
+      shell: bash
+      working-directory: dpf-standalone/v${{inputs.ANSYS_VERSION}}
+      run: |
+        pip install -e .
