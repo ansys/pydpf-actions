@@ -35,6 +35,10 @@ runs:
         $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
         echo "cloning standalone branch name: " $BranchName
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone/v${{inputs.ANSYS_VERSION}}
+        echo "pwd: "
+        pwd
+        echo "ls: "
+        ls
 
     - name: "Define installation mode"
       id: mode
