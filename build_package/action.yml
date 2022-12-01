@@ -38,6 +38,11 @@ inputs:
     required: false
     type: string
     default: ''
+  custom-requirements:
+    description: "Path to requirements.txt file to install"
+    required: false
+    type: string
+    default: ''
 
 runs:
   using: "composite"
@@ -54,6 +59,13 @@ runs:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         standalone_suffix: ${{inputs.standalone_suffix}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
+
+    - name: "Install local package"
+      uses: pyansys/pydpf-actions/install-custom-requirements@v2.3.dev1
+      if: inputs.custom-requirements != ''
+      with:
+        extra-pip-args: ${{inputs.extra-pip-args}}
+        custom-requirements: ${{inputs.custom-requirements}}
 
     - name: "Install local package"
       uses: pyansys/pydpf-actions/install-package@v2.3
