@@ -8,6 +8,11 @@ inputs:
     description: "Ansys release version number in the format 221"
     required: false
     default: "231"
+  standalone_suffix:
+    description: "Suffix of the branch on standalone"
+    required: false
+    type: string
+    default: ''
 outputs:
   SERVER:
     description: "Path to the server"
@@ -26,9 +31,8 @@ runs:
        $TEMP = ${{inputs.ANSYS_VERSION}}
        $TEMP2 = $TEMP.ToString()
        $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
-       $BranchName = "linux_release-"+$ANSYS_VERSION_WITH_POINT
+       $BranchName = "linux_release-"+$ANSYS_VERSION_WITH_POINT+"${{inputs.standalone_suffix}}"
        
-       $STANDALONE_PREFIX = if ("${{runner.os}}" -eq "Linux") { "lin" } else { "win" }
        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
        ls dpf-standalone/
       
