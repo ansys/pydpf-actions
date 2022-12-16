@@ -68,7 +68,7 @@ runs:
         custom-requirements: ${{inputs.custom-requirements}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.3
+      uses: pyansys/pydpf-actions/install-package@fix/reposition_extra_pip_arguments
       with:
         extra-pip-args: ${{inputs.extra-pip-args}}
 
