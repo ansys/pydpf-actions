@@ -18,5 +18,5 @@ runs:
         python -m build --wheel
         export WHEEL_NAME=`ls dist/*.whl`
         echo ${WHEEL_NAME}
-        pip install ${WHEEL_NAME} ${{ inputs.extra-pip-args }}
+        pip install ${{ inputs.extra-pip-args }} ${WHEEL_NAME}
         cd tests
