@@ -61,11 +61,17 @@ runs:
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.3
+      uses: pyansys/pydpf-actions/install-custom-requirements@v2.3
       if: inputs.custom-requirements != ''
       with:
         extra-pip-args: ${{inputs.extra-pip-args}}
         custom-requirements: ${{inputs.custom-requirements}}
+
+    - name: "Install local package"
+      uses: pyansys/pydpf-actions/install-package@v2.3
+      if: inputs.custom-requirements != ''
+      with:
+        extra-pip-args: ${{inputs.extra-pip-args}}
 
     - name: "Install extras"
       shell: bash
