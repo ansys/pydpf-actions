@@ -39,7 +39,7 @@ runs:
        cd dpf-standalone
        zip -qq -r ../dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
        mv Dockerfile ../Dockerfile
-       rm -r !(dist)
+       Remove-Item -recurse * -exclude dist
        cd ..
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.0"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
        
