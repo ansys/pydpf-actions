@@ -69,7 +69,6 @@ runs:
 
     - name: "Install local package"
       uses: pyansys/pydpf-actions/install-package@v2.3
-      if: inputs.custom-requirements != ''
       with:
         extra-pip-args: ${{inputs.extra-pip-args}}
 
