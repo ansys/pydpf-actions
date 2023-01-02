@@ -39,10 +39,13 @@ runs:
        cd dpf-standalone
        zip -qq -r ../dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
        mv Dockerfile ../Dockerfile
-       Remove-Item -recurse * -exclude dist
+       Get-ChildItem -Path . -Exclude dist | Remove-Item -Recurse -Force
+       echo "ls . : "
        ls .
+       echo "ls dist : "
        ls dist
        cd ..
+       
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.0"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
        
        echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.0 --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip ."
