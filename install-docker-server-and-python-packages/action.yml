@@ -107,7 +107,7 @@ runs:
 
     - name: "Zip wheelhouse"
       if: inputs.wheelhouse == 'true'
-      uses: vimtor/action-zip@v1
+      uses: vimtor/action-zip@v1.1
       with:
         files: wheelhouse
         dest: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}.zip

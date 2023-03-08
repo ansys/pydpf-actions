@@ -115,7 +115,7 @@ runs:
       if: inputs.debug == 'false'
 
     - name: "Zip HTML Documentation"
-      uses: vimtor/action-zip@v1
+      uses: vimtor/action-zip@v1.1
       with:
         files: docs/build/html
         dest: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
@@ -138,7 +138,7 @@ runs:
         echo "Found PDF doc: ${files[0]}"
 
     - name: "Zip PDF Documentation"
-      uses: vimtor/action-zip@v1
+      uses: vimtor/action-zip@v1.1
       if: ${{ inputs.generate_pdf == 'true' }}
       with:
         files: docs/build/latex/${{ steps.pdf.outputs.PDF_file }}
