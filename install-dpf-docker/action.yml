@@ -29,7 +29,7 @@ runs:
    - run: |
        echo ${{runner.os}}
        TEMP=${{inputs.ANSYS_VERSION}}
-       ANSYS_VERSION_WITH_POINT=${ANSYS_VERSION:0:2}.${ANSYS_VERSION:(-1)}
+       ANSYS_VERSION_WITH_POINT=${TEMP:0:2}.${TEMP:(-1)}
        BranchName="linux_release-"${ANSYS_VERSION_WITH_POINT}"${{inputs.standalone_suffix}}"
        
        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
@@ -57,6 +57,6 @@ runs:
        
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}" >> $GITHUB_ENV
 
-       echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} ."
-       docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} .
+       echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip ."
+       docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
      shell: bash
