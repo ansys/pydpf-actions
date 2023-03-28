@@ -47,14 +47,15 @@ runs:
        echo "ls check standalone zip"
        ls .. 
        mv Dockerfile ../Dockerfile
-       rm -r -v !("dist")
+       #rm -r -v !("dist")
+       find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
        echo "ls . : "
        ls .
        echo "ls dist : "
        ls dist
        cd ..
        
-       echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+       echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}" >> $GITHUB_ENV
 
        echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} ."
        docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} .
