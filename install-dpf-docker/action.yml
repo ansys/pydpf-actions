@@ -57,6 +57,6 @@ runs:
        
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}" >> $GITHUB_ENV
 
-       echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip ."
-       docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
+       echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip ."
+       docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
      shell: bash
