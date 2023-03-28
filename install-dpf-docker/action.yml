@@ -37,7 +37,7 @@ runs:
        ls dpf-standalone/
       
        cd dpf-standalone
-       zip -qq -r ../dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
+       zip -qq -r ../ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
        mv Dockerfile ../Dockerfile
        Get-ChildItem -Path . -Exclude dist | Remove-Item -Recurse -Force
        echo "ls . : "
@@ -47,7 +47,7 @@ runs:
        cd ..
        
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.0"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-       
-       echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.0 --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip ."
-       docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.0 --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=dpf-standalone_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
+
+       echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.0 --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} ."
+       docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.0 --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} .
      shell: pwsh
