@@ -30,7 +30,7 @@ runs:
        echo ${{runner.os}}
        TEMP=${{inputs.ANSYS_VERSION}}
        ANSYS_VERSION_WITH_POINT=${ANSYS_VERSION:0:2}.${ANSYS_VERSION:(-1)}
-       BranchName="linux_release-"+$ANSYS_VERSION_WITH_POINT+"${{inputs.standalone_suffix}}"
+       BranchName="linux_release-"${ANSYS_VERSION_WITH_POINT}"${{inputs.standalone_suffix}}"
        
        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
        ls dpf-standalone/
