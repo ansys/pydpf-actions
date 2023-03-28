@@ -37,8 +37,10 @@ runs:
        ls dpf-standalone/
              
        cd dpf-standalone/ansys/dpf/
-       $folder_name=`echo *`
-       $PATCH_VER=${folder_name:(-4)}
+       folder_name=`echo *`
+       echo "folder_name is $folder_name"
+       PATCH_VER=${folder_name:(-4)}
+       echo "patch_ver is $PATCH_VER"
        cd ../../../
 
        cd dpf-standalone
