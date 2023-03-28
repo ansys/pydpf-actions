@@ -59,4 +59,4 @@ runs:
 
        echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} ."
        docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} .
-     shell: pwsh
+     shell: bash
