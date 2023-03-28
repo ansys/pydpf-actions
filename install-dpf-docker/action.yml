@@ -38,6 +38,8 @@ runs:
       
        cd dpf-standalone
        zip -qq -r ../ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.0.zip .
+       echo "ls check standalone zip"
+       ls .. 
        mv Dockerfile ../Dockerfile
        Get-ChildItem -Path . -Exclude dist | Remove-Item -Recurse -Force
        echo "ls . : "
