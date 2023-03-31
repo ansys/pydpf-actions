@@ -51,8 +51,10 @@ runs:
        find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
        echo "ls . : "
        ls .
-       echo "ls dist : "
-       ls dist
+       if [ -d "dist" ]; then
+        echo "ls dist : "
+        ls dist
+       fi
        cd ..
        
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}" >> $GITHUB_ENV
