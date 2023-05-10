@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     target-branch: "v2.3"
-    directory: "."
+    directory: "../"
     schedule:
       interval: "daily"
     labels:
