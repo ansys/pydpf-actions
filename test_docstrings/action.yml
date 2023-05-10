@@ -35,7 +35,7 @@ runs:
       uses: pyansys/pydpf-actions/kill-dpf-servers@v2.3
 
     - name: "Upload Docstring Test Results"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: ${{ inputs.PACKAGE_NAME }}_doctest
         path: ${{ inputs.working-directory }}/junit/test-doctests-results.xml
