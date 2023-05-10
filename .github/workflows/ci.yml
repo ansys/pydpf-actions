@@ -34,7 +34,7 @@ jobs:
           ls .
 
       - name: "Setup Python"
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v4.6.0
         with:
           python-version: 3.8
 
@@ -70,7 +70,7 @@ jobs:
         shell: pwsh
 
       - name: "Setup Python"
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v4.6.0
         with:
           python-version: 3.8
 
