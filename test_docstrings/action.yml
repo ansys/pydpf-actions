@@ -38,4 +38,4 @@ runs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: ${{ inputs.PACKAGE_NAME }}_doctest
-        path: junit/test-doctests-results.xml
+        path: ${{ inputs.working-directory }}/junit/test-doctests-results.xml
