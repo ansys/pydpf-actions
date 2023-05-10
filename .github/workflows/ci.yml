@@ -20,7 +20,7 @@ jobs:
       ANSYS_VERSION: 221
 
     steps:
-      - uses: actions/checkout@v2.5.0
+      - uses: actions/checkout@v3.5.2
 
       - id: install-dpf
         uses: ./install-dpf-server
@@ -54,7 +54,7 @@ jobs:
       ANSYS_VERSION: 221
 
     steps:
-      - uses: actions/checkout@v2.5.0
+      - uses: actions/checkout@v3.5.2
 
       - name: "Install DPF"
         id: install-dpf
