@@ -5,7 +5,7 @@ inputs:
     description: "github secret to access https://github.com/ansys-dpf/dpf-standalone"
     required: true
   ANSYS_VERSION:
-    description: "Ansys release version number in the format 221"
+    description: "Ansys release version number in the format 232"
     required: false
     default: "231"
   standalone_suffix:

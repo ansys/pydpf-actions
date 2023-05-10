@@ -6,7 +6,7 @@ inputs:
     required: true
     default: "3.8"
   ANSYS_VERSION:
-    description: "Ansys release version number in the format 221"
+    description: "Ansys release version number in the format 232"
     required: true
   PACKAGE_NAME:
     description: "Package name"
