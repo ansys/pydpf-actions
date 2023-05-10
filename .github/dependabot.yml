@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "."
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
