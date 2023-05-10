@@ -2,7 +2,127 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     target-branch: "v2.3"
-    directory: "../"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../build_doc"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../build_package"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../check-licenses"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../install-custom-requirements"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../install-docker-server-and-python-packages"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../install-dpf-docker"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../install-dpf-server"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../install-package"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../kill-dpf-servers"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../prepare_tests"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../push_doc"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../release_package"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../test_api"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../test_docstrings"
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "CI/CD"
+  - package-ecosystem: "github-actions"
+    target-branch: "v2.3"
+    directory: "/../test_package"
     schedule:
       interval: "daily"
     labels:
