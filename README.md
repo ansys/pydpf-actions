@@ -15,7 +15,7 @@ To use `install-dpf-server` in a github workflow, add this step:
   uses: pyansys/pydpf-actions/install-dpf-server@v2.3
   with:
     dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
-    ANSYS_VERSION : 221
+    ANSYS_VERSION : 232
 ```
 
 #### Supported options
@@ -114,7 +114,7 @@ To use `build_doc` in a github workflow, add this step:
   uses: pyansys/pydpf-actions/build_doc@v2.3
   with:
     python-version: "3.8"
-    ANSYS_VERSION: 221
+    ANSYS_VERSION: 232
     PACKAGE_NAME: ansys-dpf-post
     MODULE: post
     dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
