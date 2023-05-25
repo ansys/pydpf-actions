@@ -54,21 +54,21 @@ runs:
 
     - name: "Install DPF"
       id: set-server-path
-      uses: pyansys/pydpf-actions/install-dpf-server@v2.3
+      uses: ansys/pydpf-actions/install-dpf-server@v2.3
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         standalone_suffix: ${{inputs.standalone_suffix}}
         ANSYS_VERSION : ${{inputs.ANSYS_VERSION}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-custom-requirements@v2.3
+      uses: ansys/pydpf-actions/install-custom-requirements@v2.3
       if: inputs.custom-requirements != ''
       with:
         extra-pip-args: ${{inputs.extra-pip-args}}
         custom-requirements: ${{inputs.custom-requirements}}
 
     - name: "Install local package"
-      uses: pyansys/pydpf-actions/install-package@v2.3
+      uses: ansys/pydpf-actions/install-package@v2.3
       with:
         extra-pip-args: ${{inputs.extra-pip-args}}
 
@@ -79,7 +79,7 @@ runs:
       if: ${{inputs.install_extras}} != null
 
     - name: "Check licences of packages"
-      uses: pyansys/pydpf-actions/check-licenses@v2.3
+      uses: ansys/pydpf-actions/check-licenses@v2.3
 
     - name: "Test import"
       shell: bash
@@ -123,4 +123,4 @@ runs:
         retention-days: 7
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.3
+      uses: ansys/pydpf-actions/kill-dpf-servers@v2.3
