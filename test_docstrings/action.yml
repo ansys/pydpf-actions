@@ -32,7 +32,7 @@ runs:
         pytest --doctest-modules $DEBUG --junitxml=junit/test-doctests-results.xml ansys/dpf/${{inputs.MODULE}}
 
     - name: "Kill all servers"
-      uses: pyansys/pydpf-actions/kill-dpf-servers@v2.3
+      uses: ansys/pydpf-actions/kill-dpf-servers@v2.3
 
     - name: "Upload Docstring Test Results"
       uses: actions/upload-artifact@v3.1.0
