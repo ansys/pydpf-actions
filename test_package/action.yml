@@ -96,13 +96,13 @@ runs:
       uses: ansys/pydpf-actions/kill-dpf-servers@v2.3
 
     - name: "Upload Docstring Test Results"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: ${{ inputs.PACKAGE_NAME }}_doctest
         path: junit/test-doctests-results.xml
 
     - name: "Upload Test Results"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: ${{ inputs.PACKAGE_NAME }}_pytest
         path: tests/junit/test-results.xml
