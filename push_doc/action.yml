@@ -30,7 +30,7 @@ runs:
       shell: bash
       run: |
         cd docs/build/html
-        git remote add origin https://${{inputs.PYANSYS_CI_BOT_TOKEN}}@github.com/pyansys/${{inputs.DOC_REPO}}
+        git remote add origin https://${{inputs.PYANSYS_CI_BOT_TOKEN}}@github.com/ansys/${{inputs.DOC_REPO}}
         git push -u origin $env:GH_DOC_BRANCH --force
       env:
         GH_DOC_BRANCH: gh-pages
