@@ -21,7 +21,7 @@ runs:
         ls
 
     - name: "Setup headless display"
-      uses: pyvista/setup-headless-display-action@v1
+      uses: pyvista/setup-headless-display-action@v2
 
     - name: "Install Test Environment"
       working-directory: ${{ inputs.working-directory }}
