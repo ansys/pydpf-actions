@@ -95,7 +95,7 @@ runs:
 
     - name: "Upload wheel to artifacts"
       if: inputs.wheel == 'true'
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v3.1.3
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
@@ -116,7 +116,7 @@ runs:
 
     - name: "Upload wheelhouse to artifacts"
       if: inputs.wheelhouse == 'true'
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v3.1.3
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
         path: '*.zip'
