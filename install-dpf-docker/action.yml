@@ -31,6 +31,7 @@ runs:
        TEMP=${{inputs.ANSYS_VERSION}}
        ANSYS_VERSION_WITH_POINT=${TEMP:0:2}.${TEMP:(-1)}
        BranchName="linux_release-"${ANSYS_VERSION_WITH_POINT}"${{inputs.standalone_suffix}}"
+       echo $BranchName
        
        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
        ls dpf-standalone/
@@ -38,7 +39,7 @@ runs:
        cd dpf-standalone/ansys/dpf/
        folder_name=`echo *`
        echo "folder_name is $folder_name"
-       PATCH_VER=${folder_name:(-4)}
+       PATCH_VER=${folder_name:(14)}
        echo "patch_ver is $PATCH_VER"
        cd ../../../
 
