@@ -37,7 +37,7 @@ runs:
   using: "composite"
   steps:
     - name: "Setup Python"
-      uses: actions/setup-python@v4.6.1
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
 
@@ -108,7 +108,7 @@ runs:
         make pdf $DEBUG_PDF
 
     - name: "Upload Documentation Build log"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v4
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
@@ -121,7 +121,7 @@ runs:
         dest: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Upload HTML Documentation"
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HTML-doc-${{inputs.PACKAGE_NAME}}
         path: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
@@ -145,7 +145,7 @@ runs:
         dest: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
 
     - name: "Upload PDF Documentation"
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v4
       if: inputs.generate_pdf == 'true'
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
