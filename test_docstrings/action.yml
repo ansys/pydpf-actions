@@ -39,3 +39,4 @@ runs:
       with:
         name: ${{ inputs.PACKAGE_NAME }}_doctest
         path: ${{ inputs.working-directory }}/junit/test-doctests-results.xml
+        overwrite: true

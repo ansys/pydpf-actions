@@ -99,6 +99,7 @@ runs:
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
         path: ./dist/*
+        overwrite: true
 
     - name: "Generate wheelhouse"
       if: inputs.wheelhouse == 'true'
@@ -119,6 +120,7 @@ runs:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}-wheelhouse-${{ runner.os }}-${{ inputs.python-version }}
         path: '*.zip'
         retention-days: 7
+        overwrite: true
 
     - name: "Kill all servers"
       uses: ansys/pydpf-actions/kill-dpf-servers@v2.3

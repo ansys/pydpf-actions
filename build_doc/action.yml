@@ -112,6 +112,7 @@ runs:
       with:
         name: doc-${{inputs.PACKAGE_NAME}}-log
         path: docs/*.txt
+        overwrite: true
       if: inputs.debug == 'false'
 
     - name: "Zip HTML Documentation"
@@ -125,6 +126,7 @@ runs:
       with:
         name: HTML-doc-${{inputs.PACKAGE_NAME}}
         path: HTML-doc-${{inputs.PACKAGE_NAME}}.zip
+        overwrite: true
 
     - name: "Find PDF Documentation"
       shell: bash
@@ -150,6 +152,7 @@ runs:
       with:
         name: PDF-doc-${{inputs.PACKAGE_NAME}}
         path: PDF-doc-${{inputs.PACKAGE_NAME}}.zip
+        overwrite: true
 
     - name: "Kill all servers"
       uses: ansys/pydpf-actions/kill-dpf-servers@v2.3
