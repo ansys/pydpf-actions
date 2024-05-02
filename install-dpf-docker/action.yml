@@ -33,7 +33,7 @@ runs:
        BranchName="linux_release-"${ANSYS_VERSION_WITH_POINT}"${{inputs.standalone_suffix}}"
        echo $BranchName
        
-       git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
+       git clone --branch $BranchName --single-branch --depth=1 https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
        ls dpf-standalone/
              
        cd dpf-standalone/ansys/dpf/
