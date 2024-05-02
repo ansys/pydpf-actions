@@ -33,7 +33,7 @@ runs:
        BranchName="linux_release-"${ANSYS_VERSION_WITH_POINT}"${{inputs.standalone_suffix}}"
        echo $BranchName
        
-       git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
+       git clone --branch $BranchName --single-branch --depth=1 https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
        ls dpf-standalone/
              
        cd dpf-standalone/ansys/dpf/
@@ -44,22 +44,33 @@ runs:
        cd ../../../
 
        cd dpf-standalone
-       zip -qq -r ../ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
-       echo "ls check standalone zip"
-       ls .. 
-       mv Dockerfile ../Dockerfile
-       #rm -r -v !("dist")
-       find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
-       echo "ls . : "
-       ls .
-       if [ -d "dist" ]; then
-        echo "ls dist : "
-        ls dist
-       fi
+       echo "dpf-standalone repo"
+       ls -a .
+       echo "removing unused files"
+       rm -rf dist
+       rm -rf .git
+       rm -rf .github
+       echo "dpf-standalone repo"
+       ls -a .
+       echo "ZIP SERVER"
+       mkdir ../docker/
+       zip -qq -r ../docker/ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
+       echo "CHECK FOR SERVER ZIP"
+       ls ../docker
+       mv Dockerfile ../docker/Dockerfile
        cd ..
+       rm -rf dpf-standalone
+       cd docker
+       echo "CHECKING TO BE INCLUDED IN DOCKER IMAGE"
+       echo "===================================="
+       ls -a .
+       echo "===================================="
+       df . -h
+       echo "===================================="
        
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}" >> $GITHUB_ENV
 
        echo "docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip ."
        docker build -t dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER} --build-arg DPF_VERSION=${{inputs.ANSYS_VERSION}} --build-arg DPF_SERVER_FILE=ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
+       docker buildx prune -f --filter "until=1h"
      shell: bash
