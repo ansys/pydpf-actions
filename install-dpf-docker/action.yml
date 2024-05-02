@@ -47,10 +47,9 @@ runs:
        echo "dpf-standalone repo"
        ls -a .
        echo "removing unused files"
-       rm -r dist
-       rm -r tests
-       rm -r .git
-       rm -r .github
+       rm -rf dist
+       rm -rf .git
+       rm -rf .github
        echo "dpf-standalone repo"
        ls -a .
        echo "ZIP SERVER"
