@@ -58,7 +58,9 @@ runs:
        echo "CHECK FOR SERVER ZIP"
        ls ../docker
        mv Dockerfile ../docker/Dockerfile
-       cd ../docker
+       cd ..
+       rm -rf dpf-standalone
+       cd docker
        echo "CHECKING TO BE INCLUDED IN DOCKER IMAGE"
        echo "===================================="
        ls -a .
