@@ -57,6 +57,10 @@ runs:
         ls dist
        fi
        cd ..
+       echo "CHECKING TO BE INCLUDED IN DOCKER IMAGE"
+       echo "===================================="
+       ls .
+       echo "===================================="
        
        echo "DPF_DOCKER=dpfv20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}" >> $GITHUB_ENV
 
