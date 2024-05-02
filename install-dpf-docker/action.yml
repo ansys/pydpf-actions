@@ -44,19 +44,22 @@ runs:
        cd ../../../
 
        cd dpf-standalone
-       zip -qq -r ../ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
-       echo "ls check standalone zip"
-       ls .. 
-       mv Dockerfile ../Dockerfile
-       #rm -r -v !("dist")
-       find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
-       echo "ls . : "
-       ls .
-       if [ -d "dist" ]; then
-        echo "ls dist : "
-        ls dist
-       fi
-       cd ..
+       echo "dpf-standalone repo"
+       ls -a .
+       echo "removing unused files"
+       rm -r dist
+       rm -r tests
+       rm -r .git
+       rm -r .github
+       echo "dpf-standalone repo"
+       ls -a .
+       echo "ZIP SERVER"
+       mkdir ../docker/
+       zip -qq -r ../docker/ansys_dpf_server_${STANDALONE_PREFIX}_v20${ANSYS_VERSION_WITH_POINT}.${PATCH_VER}.zip .
+       echo "CHECK FOR SERVER ZIP"
+       ls ../docker
+       mv Dockerfile ../docker/Dockerfile
+       cd ../docker
        echo "CHECKING TO BE INCLUDED IN DOCKER IMAGE"
        echo "===================================="
        ls -a .
