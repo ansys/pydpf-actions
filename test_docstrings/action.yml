@@ -37,6 +37,6 @@ runs:
     - name: "Upload Docstring Test Results"
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.PACKAGE_NAME }}_doctest
+        name: ${{ inputs.PACKAGE_NAME }}_doctest_${{ runner.os }}
         path: ${{ inputs.working-directory }}/junit/test-doctests-results.xml
         overwrite: true
