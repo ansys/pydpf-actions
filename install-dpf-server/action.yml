@@ -15,7 +15,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout DPF Standalone repository
+    - name: "Checkout DPF Standalone repository"
       shell: pwsh
       run: |
         echo ${{runner.os}}
@@ -25,7 +25,7 @@ runs:
         $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
         git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
       
-    - name: Generate server path environment variable
+    - name: "Generate server path environment variable"
       shell: pwsh
       run: |
           if ("${{runner.os}}" -eq "Linux")
@@ -39,31 +39,41 @@ runs:
             echo "SERVER=$env:CURRENT_DIR\dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
           }
      
-    - name: Setting action output
+    - name: "Setting action output"
       id: set-server-path
       shell: bash
       run: |
           echo "::set-output name=server-path::$(echo ${SERVER})"
 
-    - name: Generating AWP_ROOTXXX environment variable
+    - name: "Generating AWP_ROOTXXX environment variable"
       run: |
         echo "AWP_ROOT${{inputs.ANSYS_VERSION}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       shell: pwsh
 
-    - name: Starting DPF service
+    - name: "Setting DPF service"
       run: |
         $SubFolder = if ("${{runner.os}}" -eq "Linux") { "linx64" } else { "winx64" }
         echo "SubFolder=$SubFolder"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         cd ${{env.SERVER}}\aisol\bin\$SubFolder
+        echo "List of files"
         ls .
         if ("${{runner.os}}" -eq "Linux")
         {
+          echo "Setting files permissions"
           chmod 755 Ans.Dpf.Grpc.sh
           chmod 755 Ans.Dpf.Grpc.exe
         }
-        $ToLaunch = if ("${{runner.os}}" -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
-        Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
-      shell: pwsh
 
-    - run: Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
+    - name: "Launching DPF server"
+      shell: pwsh
+      run: |
+        $SubFolder = if ("${{runner.os}}" -eq "Linux") { "linx64" } else { "winx64" }
+        $ToLaunch = if ("${{runner.os}}" -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
+
+        cd ${{env.SERVER}}\aisol\bin\$env:SubFolder
+        Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
+
+    - name: "Print log file"
+      run: |
+        Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
       shell: pwsh
