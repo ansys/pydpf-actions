@@ -18,17 +18,19 @@ runs:
     - name: "Checkout DPF Standalone repository"
       shell: pwsh
       run: |
-        echo ${{runner.os}}
-        $TEMP = ${{inputs.ANSYS_VERSION}}
+        echo "OS: ${{ runner.os }}"
+        echo "Ansys version: ${{ inputs.ANSYS_VERSION }}"
+
+        $TEMP = ${{ inputs.ANSYS_VERSION }}
         $TEMP2 = $TEMP.ToString()
         $ANSYS_VERSION_WITH_POINT=$TEMP2.Insert(2,".")
-        $BranchName = if ("${{runner.os}}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
-        git clone --branch $BranchName --single-branch https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone
-      
+        $BranchName = if ("${{ runner.os }}" -eq "Linux") { "linux_release-$ANSYS_VERSION_WITH_POINT" } else { "win_release-$ANSYS_VERSION_WITH_POINT" }
+        git clone --branch $BranchName --single-branch https://${{ inputs.dpf-standalone-TOKEN }}@github.com/ansys-dpf/dpf-standalone
+
     - name: "Generate server path environment variable"
       shell: pwsh
       run: |
-          if ("${{runner.os}}" -eq "Linux")
+          if ("${{ runner.os }}" -eq "Linux")
           {
             $env:CURRENT_DIR = Get-Location
             echo "SERVER=$env:CURRENT_DIR/dpf-standalone"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
@@ -48,17 +50,17 @@ runs:
     - name: "Generating AWP_ROOTXXX environment variable"
       shell: pwsh
       run: |
-        echo "AWP_ROOT${{inputs.ANSYS_VERSION}}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        echo "AWP_ROOT${{ inputs.ANSYS_VERSION }}=${{env.SERVER}}"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 
     - name: "Setting DPF service"
       shell: pwsh
       run: |
-        $SubFolder = if ("${{runner.os}}" -eq "Linux") { "linx64" } else { "winx64" }
+        $SubFolder = if ("${{ runner.os }}" -eq "Linux") { "linx64" } else { "winx64" }
         echo "SubFolder=$SubFolder"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         cd ${{env.SERVER}}\aisol\bin\$SubFolder
         echo "List of files"
         ls .
-        if ("${{runner.os}}" -eq "Linux")
+        if ("${{ runner.os }}" -eq "Linux")
         {
           echo "Setting files permissions"
           chmod 755 Ans.Dpf.Grpc.sh
@@ -68,8 +70,8 @@ runs:
     - name: "Launching DPF server"
       shell: pwsh
       run: |
-        $SubFolder = if ("${{runner.os}}" -eq "Linux") { "linx64" } else { "winx64" }
-        $ToLaunch = if ("${{runner.os}}" -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
+        $SubFolder = if ("${{ runner.os }}" -eq "Linux") { "linx64" } else { "winx64" }
+        $ToLaunch = if ("${{ runner.os }}" -eq "Linux") { "./Ans.Dpf.Grpc.sh" } else { "./Ans.Dpf.Grpc.bat" }
 
         cd ${{env.SERVER}}\aisol\bin\$env:SubFolder
         Start-Process -FilePath $ToLaunch -ArgumentList "--address 127.0.0.1" -RedirectStandardOutput "log.txt"
