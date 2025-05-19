@@ -22,6 +22,15 @@ runs:
 
     - name: "Setup headless display"
       uses: pyvista/setup-headless-display-action@48066dd0b79cf46babc16223a1dce3aa4803ec43 # v4.0
+      with:
+        qt: 'true'
+
+    - name: "Setup LibOSMesa on Linux runners"
+      if: runner.os == Linux
+      shell: bash
+      run: |
+        echo "VTK_DEFAULT_OPENGL_WINDOW=vtkOSOpenGLRenderWindow" >> ${GITHUB_ENV}
+
 
     - name: "Install Test Environment"
       working-directory: ${{ inputs.working-directory }}
