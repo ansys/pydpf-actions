@@ -26,7 +26,7 @@ runs:
         qt: 'true'
 
     - name: "Setup LibOSMesa on Linux runners"
-      if: runner.os == Linux
+      if: runner.os == 'Linux'
       shell: bash
       run: |
         echo "VTK_DEFAULT_OPENGL_WINDOW=vtkOSOpenGLRenderWindow" >> ${GITHUB_ENV}
