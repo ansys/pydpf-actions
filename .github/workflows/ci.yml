@@ -14,10 +14,10 @@ on:
 jobs:
   test_windows:
     name: Windows
-    runs-on: windows-2019
+    runs-on: windows-2022
 
     env:
-      ANSYS_VERSION: 232
+      ANSYS_VERSION: 261
 
     steps:
       - uses: actions/checkout@v3.5.2
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANSYS_VERSION: 232
+      ANSYS_VERSION: 261
 
     steps:
       - uses: actions/checkout@v3.5.2
