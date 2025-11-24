@@ -20,6 +20,10 @@ jobs:
       ANSYS_VERSION: 261
 
     steps:
+      - id: activate long paths
+        run: |
+          git config --system core.longpaths true
+    
       - uses: actions/checkout@v3.5.2
 
       - id: install-dpf
