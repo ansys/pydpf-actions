@@ -1,12 +1,12 @@
-name: "Build DPF Package"
+name: "Install DPF server on docker and python packages"
 description: "Builds the DPF package"
 inputs:
   python-version:
     description: "Python version"
     required: true
-    default: "3.8"
+    default: "3.11"
   ANSYS_VERSION:
-    description: "Ansys release version number in the format 2XX"
+    description: "Ansys release version number in the format 232"
     required: true
   PACKAGE_NAME:
     description: "Package name"
@@ -54,7 +54,7 @@ runs:
 
     - name: "Install DPF"
       id: set-server-path
-      uses: ansys/pydpf-actions/install-dpf-server@v2.3
+      uses: ansys/pydpf-actions/install-dpf-docker@v2.3
       with:
         dpf-standalone-TOKEN: ${{inputs.dpf-standalone-TOKEN}}
         standalone_suffix: ${{inputs.standalone_suffix}}
@@ -98,15 +98,13 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.PACKAGE_NAME }}-v${{ steps.version.outputs.VERSION }}_wheel
-        path: ./dist/
+        path: ./dist/*
         overwrite: true
 
     - name: "Generate wheelhouse"
       if: inputs.wheelhouse == 'true'
       shell: bash
-      run: |
-        pip install wheel
-        pip wheel . -w wheelhouse ${{inputs.extra-pip-args}}
+      run: pip wheel . -w wheelhouse ${{inputs.extra-pip-args}}
 
     - name: "Zip wheelhouse"
       if: inputs.wheelhouse == 'true'

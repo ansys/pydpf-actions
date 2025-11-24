@@ -14,23 +14,34 @@ on:
 jobs:
   test_windows:
     name: Windows
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     env:
       ANSYS_VERSION: 261
+
     steps:
       - uses: actions/checkout@v5
 
       - id: install-dpf
         uses: ./install-dpf-server
         with:
-          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          dpf-standalone-TOKEN: ${{secrets.PYANSYS_CI_BOT_TOKEN}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
           
       - name: "Go to to server path"
         run: |
           cd ${{ steps.install-dpf.outputs.SERVER }}
           ls .
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
+
+      - name: "Install psutil"
+        shell: bash
+        run: |
+          pip install psutil
 
       - name: "Kill all servers"
         uses: ./kill-dpf-servers
@@ -45,10 +56,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - id: install-dpf
+      - name: "Install DPF"
+        id: install-dpf
         uses: ./install-dpf-server
         with:
-          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          dpf-standalone-TOKEN: ${{secrets.PYANSYS_CI_BOT_TOKEN}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
 
       - name: "Go to to server path"
@@ -56,6 +68,16 @@ jobs:
           cd ${{ steps.install-dpf.outputs.SERVER }}
           ls .
         shell: pwsh
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: "Install psutil"
+        shell: bash
+        run: |
+          pip install psutil
 
       - name: "Kill all servers"
         uses: ./kill-dpf-servers

@@ -1,0 +1,22 @@
+name: "Install custom requirements"
+description: "Installs a custom requirements file."
+inputs:
+  extra-pip-args:
+    description: "Args given to pip install command"
+    default: ""
+    type: string
+    required: false
+  custom-requirements:
+    description: "Path to requirements.txt file to install"
+    required: false
+    type: string
+    default: ''
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Install custom requirements"
+      shell: bash
+      run: |
+        pip install -r ${{ inputs.custom-requirements }} ${{ inputs.extra-pip-args }}
