@@ -20,7 +20,7 @@ jobs:
       ANSYS_VERSION: 261
 
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v5
 
       - id: install-dpf
         uses: ./install-dpf-server
@@ -54,7 +54,7 @@ jobs:
       ANSYS_VERSION: 261
 
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v5
 
       - name: "Install DPF"
         id: install-dpf
@@ -72,7 +72,7 @@ jobs:
       - name: "Setup Python"
         uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: 3.11
 
       - name: "Install psutil"
         shell: bash
