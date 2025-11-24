@@ -22,6 +22,7 @@ runs:
   steps:
     - name: "Activate long paths"
       id: activate_long_paths
+      if: runner.os == 'Windows'
       shell: pwsh
       run: |
         git config --system core.longpaths true
