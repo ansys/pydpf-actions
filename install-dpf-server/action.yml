@@ -20,6 +20,10 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: activate_long_paths
+      run: |
+        git config --system core.longpaths true
+  
     - name: "Clone DPF"
       id: clone
       shell: pwsh
