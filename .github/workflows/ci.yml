@@ -20,7 +20,7 @@ jobs:
       ANSYS_VERSION: 261
 
     steps:
-      - id: activate long paths
+      - id: activate_long_paths
         run: |
           git config --system core.longpaths true
     
