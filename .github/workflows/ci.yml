@@ -24,7 +24,7 @@ jobs:
       - id: install-dpf
         uses: ./install-dpf-server
         with:
-          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          dpf-standalone-TOKEN: ${{secrets.PYANSYS_CI_BOT_TOKEN}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
           
       - name: "Go to to server path"
@@ -48,7 +48,7 @@ jobs:
       - id: install-dpf
         uses: ./install-dpf-server
         with:
-          dpf-standalone-TOKEN: ${{secrets.DPF_PIPELINE}}
+          dpf-standalone-TOKEN: ${{secrets.PYANSYS_CI_BOT_TOKEN}}
           ANSYS_VERSION: ${{env.ANSYS_VERSION}}
 
       - name: "Go to to server path"
