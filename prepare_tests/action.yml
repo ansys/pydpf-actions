@@ -9,6 +9,10 @@ inputs:
     description: "Working-directory"
     required: false
     default: "."
+  install-from-dependency-groups:
+    description: "Install from dependency groups. If false, test dependencies are installed from requirements files."
+    required: false
+    default: false
 
 runs:
   using: "composite"
@@ -32,11 +36,21 @@ runs:
         echo "VTK_DEFAULT_OPENGL_WINDOW=vtkOSOpenGLRenderWindow" >> ${GITHUB_ENV}
 
 
-    - name: "Install Test Environment"
+    - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
+      if: !inputs.install-from-dependency-groups
       shell: bash
       run: |
+        pip install -U pip
         pip install -r requirements/requirements_test.txt
+
+    - name: "Install Test Environment From Dependency Groups"
+      working-directory: ${{ inputs.working-directory }}
+      if: inputs.install-from-dependency-groups
+      shell: bash
+      run: |
+        pip install -U pip
+        pip install -group test
 
     - name: "Set TMP"
       shell: bash
