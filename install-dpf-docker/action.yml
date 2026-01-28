@@ -2,12 +2,12 @@ name: "Install DPF Server"
 description: "Install and test DPF Server for different OS and versions"
 inputs:
   dpf-standalone-TOKEN:
-    description: "github secret to access https://github.com/ansys-dpf/dpf-standalone"
+    description: "github secret to access https://github.com/ansys-internal/dpf-standalone"
     required: true
   ANSYS_VERSION:
-    description: "Ansys release version number in the format 232"
+    description: "Ansys release version number in the format 2XX"
     required: false
-    default: "231"
+    default: "261"
   standalone_suffix:
     description: "Suffix of the branch on standalone"
     required: false
@@ -33,7 +33,7 @@ runs:
        BranchName="linux_release-"${ANSYS_VERSION_WITH_POINT}"${{inputs.standalone_suffix}}"
        echo $BranchName
        
-       git clone --branch $BranchName --single-branch --depth=1 https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-dpf/dpf-standalone dpf-standalone
+       git clone --branch $BranchName --single-branch --depth=1 https://${{inputs.dpf-standalone-TOKEN}}@github.com/ansys-internal/dpf-standalone dpf-standalone
        ls dpf-standalone/
              
        cd dpf-standalone/ansys/dpf/
