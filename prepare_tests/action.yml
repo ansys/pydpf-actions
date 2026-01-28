@@ -12,7 +12,7 @@ inputs:
   install-from-dependency-groups:
     description: "Install from dependency groups. If false, test dependencies are installed from requirements files."
     required: false
-    default: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -38,7 +38,7 @@ runs:
 
     - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
-      if: ${{ !inputs.install-from-dependency-groups }}
+      if: ${{ inputs.install-from-dependency-groups == 'false' }}
       shell: bash
       run: |
         pip install -U pip
@@ -46,7 +46,7 @@ runs:
 
     - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
-      if: ${{ inputs.install-from-dependency-groups }}
+      if: ${{ inputs.install-from-dependency-groups == 'true' }}
       shell: bash
       run: |
         pip install -U pip
