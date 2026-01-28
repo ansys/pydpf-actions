@@ -38,7 +38,7 @@ runs:
 
     - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
-      if: !inputs.install-from-dependency-groups
+      if: ${{ !inputs.install-from-dependency-groups }}
       shell: bash
       run: |
         pip install -U pip
@@ -46,7 +46,7 @@ runs:
 
     - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
-      if: inputs.install-from-dependency-groups
+      if: ${{ inputs.install-from-dependency-groups }}
       shell: bash
       run: |
         pip install -U pip
