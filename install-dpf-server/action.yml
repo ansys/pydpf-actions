@@ -13,10 +13,17 @@ inputs:
     required: false
     type: string
     default: ''
+  skip-python-install:
+    description: "Skip pip-installing the DPF server package. Set to 'true' when the caller workflow manages its own environment (e.g. uv-based) and will install the server itself using the standalone-path output."
+    required: false
+    default: "false"
 outputs:
   SERVER:
     description: "Path to the server"
     value: ${{ steps.set-server-path.outputs.server-path }}
+  standalone-path:
+    description: "Path to the cloned dpf-standalone directory, for PIP mode installs (e.g. 'uv pip install -e .') when skip-python-install is true"
+    value: ${{ steps.set-standalone-path.outputs.standalone-path }}
 runs:
   using: "composite"
   steps:
@@ -46,6 +53,12 @@ runs:
         pwd
         echo "ls: "
         ls
+
+    - name: "Set the standalone-path output"
+      id: set-standalone-path
+      shell: bash
+      run: |
+        echo "standalone-path=dpf-standalone/v${{ inputs.ANSYS_VERSION }}" >> $GITHUB_OUTPUT
 
     - name: "Define installation mode"
       id: mode
@@ -110,7 +123,7 @@ runs:
       run: Get-Content -Path $env:SERVER\aisol\bin\$env:SubFolder\log.txt
 
     - name: "Pip install the server"
-      if: env.MODE == 'PIP'
+      if: env.MODE == 'PIP' && inputs.skip-python-install == 'false'
       shell: bash
       working-directory: dpf-standalone/v${{inputs.ANSYS_VERSION}}
       run: |
