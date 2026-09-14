@@ -13,7 +13,7 @@ inputs:
     description: "Install from dependency groups. If false, test dependencies are installed from requirements files."
     required: false
     default: "false"
-  skip-python-install:
+  skip-python-dependencies-install:
     description: "Skip installing python test dependencies. Set to 'true' when the caller workflow manages its own environment (e.g. uv-based) and has already installed the necessary dependencies."
     required: false
     default: "false"
@@ -42,7 +42,7 @@ runs:
 
     - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
-      if: ${{ inputs.install-from-dependency-groups == 'false' && inputs.skip-python-install == 'false' }}
+      if: ${{ inputs.install-from-dependency-groups == 'false' && inputs.skip-python-dependencies-install == 'false' }}
       shell: bash
       run: |
         python -m pip install -U pip
@@ -50,7 +50,7 @@ runs:
 
     - name: "Install Test Environment From Dependency Groups"
       working-directory: ${{ inputs.working-directory }}
-      if: ${{ inputs.install-from-dependency-groups == 'true' && inputs.skip-python-install == 'false' }}
+      if: ${{ inputs.install-from-dependency-groups == 'true' && inputs.skip-python-dependencies-install == 'false' }}
       shell: bash
       run: |
         python -m pip install -U pip
